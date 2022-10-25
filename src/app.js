@@ -11,4 +11,5 @@ app.use(express.json());
 
 app.listen(app.get("port"), () => {
   console.log(`Servidor iniciado en el puerto ${app.get("port")}`);
+  //Mensaje de bienvenida en la consola
 });
