@@ -4,7 +4,7 @@ const morgan = require("morgan");
 const app = express();
 
 app.set("port", 4001);
-
+//Puerto que se utilizará
 app.use(morgan("dev"));
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
