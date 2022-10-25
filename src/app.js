@@ -10,5 +10,5 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
 app.listen(app.get("port"), () => {
-  console.log("Servidor inicado en el puerto " + app.get("port"));
+  console.log(`Servidor iniciado en el puerto ${app.get("port")}`);
 });
