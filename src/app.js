@@ -1,3 +1,9 @@
+//Fase 1: git add .
+//Fase 2: git commit -m"comentario"
+//Fase 3: git push origin dev
+//Comando para cambiar entre ramas: git checkout main
+
+
 const express = require("express");
 const morgan = require("morgan");
 
