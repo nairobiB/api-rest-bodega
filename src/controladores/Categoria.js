@@ -1,6 +1,7 @@
 
 const { where } = require("sequelize");
-const Categoria = require("../modelos/Categoria"); 
+const Categoria = require("../modelos/Categoria");
+const Seccion = require("../modelos/Seccion");
 const { validationResult } = require("express-validator");
 const { query } = require("express");
 
@@ -80,32 +81,37 @@ exports.buscarnombreCategoria  = async (req, res) => {
 
 };
 
-exports.Guardar = async (req, res) => { 
+exports.Guardar = async (req, res) => {
   const validacion = validationResult(req);
   if (!validacion.isEmpty()) {
     console.log(validacion);
     res.json({ msj: "Errores en los datos" });
   } else {
-    const { nombreCategoria } = req.body;
+    const { nombreCategoria, SeccionId } = req.body;
     console.log(nombreCategoria);
-    if (!nombreCategoria) {
-      res.json({ msj: "Debe enviar el nombre de la categoria" });
-    } else {
-      await Categoria.create({
-        nombreCategoria: nombreCategoria,
-      })
-        .then((data) => {
-          res.json({ msj: "Registro guardado" });
-        })
-        .catch((er) => {
-          var errores = "";
-          er.errors.forEach((element) => {
-            console.log(element.message);
-            errores += element.message + ". ";
+    if (!nombreCategoria || !SeccionId) {
+      res.json({ msj: "Debe enviar los datos completos de la categoria" });
+    }else{
+      var buscarSeccion = await Seccion.findOne({where: {id:SeccionId}});
+        if(!buscarSeccion){
+          res.json({msj: "debe de enviar los datos completos"});
+        }else{
+          await Categoria.create({
+          nombreCategoria: nombreCategoria,
+          SeccionId : SeccionId
+          })
+          .then((data) => {
+            res.json({ msj: "Registro guardado" });
+          })
+          .catch((er) => {
+            var errores = "";
+            er.errors.forEach((element) => {
+              console.log(element.message);
+              errores += element.message + ". ";
+            });
+            res.json({ errores });
           });
-          res.json({ errores });
-        });
-    }
+        }
   }
 };
 
