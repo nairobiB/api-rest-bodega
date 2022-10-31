@@ -23,7 +23,7 @@ ruta.post(
 ruta.get(
   "/buscarnombre",
   query("nombreCompleto")
-    .isLength({ min: 5, max: 150 })
+    .isLength({ min: 1, max: 150 })
     .withMessage(
       "Debe escribir el nombre del personal con una longitud de 5 - 150 caracteres"
     ),

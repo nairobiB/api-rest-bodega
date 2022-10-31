@@ -2,6 +2,7 @@ const { where } = require("sequelize");
 const Personal = require("../modelos/Personal");
 const { validationResult } = require("express-validator");
 const { query } = require("express");
+const { Op } = require("sequelize");
 
 exports.Inicio = (req, res) => {
   const moduloPersonal = {
@@ -65,17 +66,15 @@ exports.BuscarNombre = async (req, res) => {
     res.json({ msj: "Errores en los datos" });
   } else {
     const { nombreCompleto } = req.query;
-    const listarCategorias = await Tipo.findAll({
+    const listarPersonal = await Personal.findAll({
       attributes: [["nombreCompleto", "Nombre completo"]], //solo mostrar estos campos
       where: {
-        [Op.and]: {
-          nombreCompleto: {
-            [Op.like]: nombreCompleto,
-          },
+        nombreCompleto: {
+          [Op.like]: nombreCompleto,
         },
       },
     });
-    res.json(listarCategorias);
+    res.json(listarPersonal);
   }
 };
 
