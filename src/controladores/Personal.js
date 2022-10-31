@@ -1,46 +1,45 @@
 const { where } = require("sequelize");
-const Categoria = require("../modelos/Categoria");
-const Seccion = require("../modelos/Seccion");
+const Personal = require("../modelos/Personal");
 const { validationResult } = require("express-validator");
 const { query } = require("express");
 
 exports.Inicio = (req, res) => {
-  const moduloCategoria = {
-    modulo: "categorias",
-    descripcion: "Gestiona las operaciones con el modelo de categorias",
+  const moduloPersonal = {
+    modulo: "personal",
+    descripcion: "Gestiona las operaciones con el modelo de personal",
     rutas: [
       {
-        ruta: "/api/Categorias/listar",
-        descripcion: "Lista los categorias de productos",
+        ruta: "/api/Personal/listar",
+        descripcion: "Lista los personal",
         metodo: "GET",
         parametros: "Ninguno",
       },
       {
-        ruta: "/api/categorias/guardar",
-        descripcion: "Guarda los datos de un categoria de producto",
+        ruta: "/api/personal/guardar",
+        descripcion: "Guarda los datos de un personal",
         metodo: "POST",
         parametros: "Ninguno",
       },
       {
-        ruta: "/api/categorias/editar",
-        descripcion: "Modifica los datos de un categoria de producto",
+        ruta: "/api/personal/editar",
+        descripcion: "Modifica los datos de un personal",
         metodo: "PUT",
         parametros: "Ninguno",
       },
       {
-        ruta: "/api/categorias/eliminar",
-        descripcion: "Elimina los datos de un categoria de producto",
+        ruta: "/api/personal/eliminar",
+        descripcion: "Elimina los datos de un personal",
         metodo: "DELETE",
         parametros: "Ninguno",
       },
     ],
   };
-  res.json(moduloCategoria);
+  res.json(moduloPersonal);
 };
 
 exports.Listar = async (req, res) => {
-  const listarCategorias = await Categoria.findAll();
-  res.json(listarCategorias);
+  const listarPersonal = await Personal.findAll();
+  res.json(listarPersonal);
 };
 
 exports.BuscarId = async (req, res) => {
@@ -50,12 +49,12 @@ exports.BuscarId = async (req, res) => {
     res.json({ msj: "Errores en los datos enviados" });
   } else {
     const { id } = req.query;
-    const listarCategorias = await Categoria.findAll({
+    const listarPersonal = await Personal.findAll({
       where: {
         id: id,
       },
     });
-    res.json(listarCategorias);
+    res.json(listarPersonal);
   }
 };
 
@@ -65,13 +64,13 @@ exports.BuscarNombre = async (req, res) => {
     console.log(validacion);
     res.json({ msj: "Errores en los datos" });
   } else {
-    const { nombreCategoria } = req.query;
+    const { nombreCompleto } = req.query;
     const listarCategorias = await Tipo.findAll({
-      attributes: [["nombreCategoria", "Nombre categoria"]], //solo mostrar estos campos
+      attributes: [["nombreCompleto", "Nombre completo"]], //solo mostrar estos campos
       where: {
         [Op.and]: {
-          nombreCategoria: {
-            [Op.like]: nombreCategoria,
+          nombreCompleto: {
+            [Op.like]: nombreCompleto,
           },
         },
       },
@@ -86,58 +85,61 @@ exports.Guardar = async (req, res) => {
     console.log(validacion);
     res.json({ msj: "Errores en los datos" });
   } else {
-    const { nombreCategoria, SeccionId } = req.body;
-    console.log(nombreCategoria);
-    if (!nombreCategoria || !SeccionId) {
-      res.json({ msj: "Debe enviar los datos completos de la categoria" });
+    const { nombreCompleto, direccion, correo, telefono, fechaNac } = req.body;
+    console.log(nombreCompleto);
+    if (!nombreCompleto || !direccion || !correo || !telefono || !fechaNac) {
+      res.json({ msj: "Debe enviar los datos completos de la personal" });
     } else {
-      var buscarSeccion = await Seccion.findOne({ where: { id: SeccionId } });
-      if (!buscarSeccion) {
-        res.json({ msj: "debe de enviar los datos completos" });
-      } else {
-        await Categoria.create({
-          nombreCategoria: nombreCategoria,
-          SeccionId: SeccionId,
+      await Personal.create({
+        nombreCompleto: nombreCompleto,
+        direccion: direccion,
+        correo,
+        telefono,
+        fechaNac,
+      })
+        .then((data) => {
+          res.json({ msj: "Registro guardado" });
         })
-          .then((data) => {
-            res.json({ msj: "Registro guardado" });
-          })
-          .catch((er) => {
-            var errores = "";
-            er.errors.forEach((element) => {
-              console.log(element.message);
-              errores += element.message + ". ";
-            });
-            res.json({ errores });
+        .catch((er) => {
+          var errores = "";
+          er.errors.forEach((element) => {
+            console.log(element.message);
+            errores += element.message + ". ";
           });
-      }
+          res.json({ errores });
+        });
     }
   }
 };
 
 exports.Editar = async (req, res) => {
   const { id } = req.query;
-  const { nombreCategoria } = req.body;
+  const { nombreCompleto, direccion, correo, telefono, fechaNac } = req.body;
 
   console.log(id);
 
   if (!id) {
     res.send("Ingrese el ID");
   } else {
-    if (!nombreCategoria) {
-      res.send("Ingrese el nombreCategoria");
+    if (!nombreCompleto || !direccion || !correo || !telefono || !fechaNac) {
+      res.send("Ingrese el los datos completos");
     } else {
-      var buscarCategoria = await Categoria.findOne({
+      var buscarPersonal = await Personal.findOne({
         where: {
           id: id,
         },
       });
 
-      if (!buscarCategoria) {
-        res.send("El id del categoria no existe");
+      if (!buscarPersonal) {
+        res.send("El id del personal no existe");
       } else {
-        buscarCategoria.nombreCategoria = nombreCategoria;
-        await buscarCategoria
+        buscarPersonal.nombreCompleto = nombreCompleto;
+        buscarPersonal.direccion = direccion;
+        buscarPersonal.correo = correo;
+        buscarPersonal.telefono = telefono;
+        buscarPersonal.fechaNac = fechaNac;
+
+        await buscarPersonal
           .save()
           .then((data) => {
             console.log(data);
@@ -157,7 +159,7 @@ exports.Eliminar = async (req, res) => {
   if (!id) {
     res.json("Debe escribir el Id");
   } else {
-    await Categoria.destroy({ where: { id: id } })
+    await Personal.destroy({ where: { id: id } })
       .then((data) => {
         if (data == 0) {
           res.send("El id no existe");
