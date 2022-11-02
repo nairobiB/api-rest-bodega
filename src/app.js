@@ -24,6 +24,8 @@ app.get("/", (req, res) => {
 app.use("/api/secciones", require("./rutas/Seccion"));
 app.use("/api/categorias", require("./rutas/Categoria"));
 app.use("/api/personal", require("./rutas/Personal"));
+app.use("/api/salidas", require("./rutas/salidas"));
+app.use("/api/detalles_Salida", require("./rutas/detalles_Salida"));
 
 app.listen(app.get("port"), () => {
   //esta tiene que ser la ultima linea del codigo
