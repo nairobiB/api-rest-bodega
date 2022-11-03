@@ -4,9 +4,6 @@ var datetime = Date.now();
 
 const salidas = db.define('salidas',{
   id:{type:DataTypes.INTEGER,primaryKey: true, allowNull: false, autoIncrement:true},
-  idProducto:{type:DataTypes.INTEGER, allowNull: false,
-    validate: {isInt: true}
-  },
   idCliente:{type:DataTypes.INTEGER, allowNull: false,
     validate: {isInt: true}
   },
