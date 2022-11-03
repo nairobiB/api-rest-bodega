@@ -1,47 +1,47 @@
 const { where } = require("sequelize");
-const Categoria = require("../modelos/Categoria");
-const Seccion = require("../modelos/Seccion");
+const Categoria = require("../modelos/rol");
 const { validationResult } = require("express-validator");
 const { query } = require("express");
+const Rol = require("../modelos/rol");
 
 exports.Inicio = (req, res) => {
-  const moduloCategoria = {
-    modulo: "categorias",
-    descripcion: "Gestiona las operaciones con el modelo de categorias",
+  const moduloRoles = {
+    modulo: "roles",
+    descripcion: "Gestiona las operaciones con el modelo de roles",
     rutas: [
       {
-        ruta: "/api/Categorias/listar",
-        descripcion: "Lista los categorias de productos",
-        metodo: "GET", 
+        ruta: "/api/roles/listar",
+        descripcion: "Lista los roles",
+        metodo: "GET",
         parametros: "Ninguno",
       },
       {
-        ruta: "/api/categorias/guardar", 
-        descripcion: "Guarda los datos de un categoria de producto",
-        metodo: "POST", 
+        ruta: "/api/roles/guardar",
+        descripcion: "Guarda los datos de un roles",
+        metodo: "POST",
         parametros: "Ninguno",
       },
       {
-        ruta: "/api/categorias/editar",
-        descripcion: "Modifica los datos de un categoria de producto",
-        metodo: "PUT", 
+        ruta: "/api/roles/editar",
+        descripcion: "Modifica los datos de un roles",
+        metodo: "PUT",
         parametros: "Ninguno",
       },
       {
-        ruta: "/api/categorias/eliminar",
-        descripcion: "Elimina los datos de un categoria de producto",
-        metodo: "DELETE", 
+        ruta: "/api/roles/eliminar",
+        descripcion: "Elimina los datos de un roles",
+        metodo: "DELETE",
         parametros: "Ninguno",
       },
     ],
   };
-  res.json(moduloCategoria);
+  res.json(moduloRoles);
 };
 
 
 exports.Listar = async (req, res) => {
-  const listarCategorias = await Categoria.findAll();
-  res.json(listarCategorias);
+  const listarRoles = await Rol.findAll();
+  res.json(listarRoles);
 };
 
 exports.BuscarId  = async (req, res) => {
@@ -52,30 +52,30 @@ exports.BuscarId  = async (req, res) => {
   }
   else{
     const { id } = req.query
-    const listarCategorias = await Categoria.findAll({
+    const listarRoles = await Rol.findAll({
       where:{
         id: id
       }
     });
-    res.json(listarCategorias);
+    res.json(listarRoles);
   }
 
 };
 
-exports.buscarnombreCategoria  = async (req, res) => {
+exports.buscarnombreRol  = async (req, res) => {
   const validacion = validationResult(req);
   if(!validacion.isEmpty()){
     console.log(validacion.errores);
     res.json({ msj: 'Errores en los datos enviados'})
   }
   else{
-    const { nombreCategoria } = req.query
-    const listarCategorias = await Categoria.findAll({
+    const { nombreRol } = req.query
+    const listarRol = await Rol.findAll({
       where:{
-        nombreCategoria: nombreCategoria
+        nombreRol: nombreRol
       }
     });
-    res.json(listarCategorias);
+    res.json(listarRol);
   }
 
 };
@@ -86,61 +86,54 @@ exports.Guardar = async (req, res) => {
     console.log(validacion);
     res.json({ msj: "Errores en los datos" });
   } else {
-    const { nombreCategoria, SeccionId } = req.body;
-    console.log(nombreCategoria);
-    if (!nombreCategoria || !SeccionId) {
-      res.json({ msj: "Debe enviar los datos completos de la categoria" });
-    }else{
-      var buscarSeccion = await Seccion.findOne({where: {id:SeccionId}});
-        if(!buscarSeccion){
-          res.json({msj: "debe de enviar los datos completos"});
+        const { nombreRol } = req.body;
+        console.log(nombreRol);
+        if (!nombreRol) {
+        res.json({ msj: "Debe enviar los datos completos del rol" });
         }else{
-          await Categoria.create({
-          nombreCategoria: nombreCategoria,
-          SeccionId : SeccionId
-          })
-          .then((data) => {
+            await Rol.create({
+              nombreRol: nombreRol
+            })
+            .then((data) => {
             res.json({ msj: "Registro guardado" });
-          })
-          .catch((er) => {
+            })
+            .catch((er) => {
             var errores = "";
             er.errors.forEach((element) => {
-              console.log(element.message);
-              errores += element.message + ". ";
+                console.log(element.message);
+                errores += element.message + ". ";
             });
             res.json({ errores });
-          });
+            });
         }
     }
-  }
 };
+
 
 exports.Editar = async (req, res) => {
   const { id } = req.query;
-  const { nombreCategoria } = req.body;
-
-
-  console.log(id); 
+  const { nombreRol } = req.body;
+  console.log(id);
 
   if (!id) {
 
     res.send("Ingrese el ID");
   } else {
-    if (!nombreCategoria) {
+    if (!nombreRol) {
 
-      res.send("Ingrese el nombreCategoria");
+      res.send("Ingrese el nombre del rol");
     } else {
-      var buscarCategoria = await Categoria.findOne({
+      var buscarRol = await Rol.findOne({
         where: {
           id: id,
         },
       });
 
-      if (!buscarCategoria) {
+      if (!buscarRol) {
         res.send("El id del categoria no existe");
       } else {
-        buscarCategoria.nombreCategoria = nombreCategoria;
-        await buscarCategoria
+        buscarRol.nombreRol = nombreRol;
+        await buscarRol
           .save()
           .then((data) => {
             console.log(data);
