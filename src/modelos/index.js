@@ -10,6 +10,8 @@ const Cliente = require("./Cliente");
 const Rol = require('./rol');
 const Usuario = require('./usuario');
 const Producto = require('./Producto');
+const Entrada = require('./Entrada');
+const EntradaDetalles = require('./EntradaDetalle');
 
 exports.CrearModelos = () => {
   Seccion.hasMany(Categoria);
@@ -26,11 +28,22 @@ exports.CrearModelos = () => {
   detalles_Salida.belongsTo(salidas, { foreignKey: 'id' });
   salidas.hasMany(detalles_Salida, { foreignKey: 'idProducto' });
   detalles_Salida.belongsTo(salidas, { foreignKey: 'idProducto' });
-
   detalles_Salida.belongsTo(Seccion, { foreignKey: 'id' });
+
   Seccion.hasOne(detalles_Salida, { foreignKey: 'idSeccion' });
   Categoria.hasMany(Producto);
+
   Producto.belongsTo(Categoria);
+
+  Entrada.hasMany(EntradaDetalles, { foreignKey: 'idEntrada' });
+  EntradaDetalles.belongsTo(Entrada, { foreignKey: 'idEntrada' });
+
+  Entrada.hasMany(Cliente, { foreignKey: 'idCliente' });
+  Cliente.belongsTo(Entrada, { foreignKey: 'idCliente' });
+  EntradaDetalles.hasMany(Producto, { foreignKey: 'idProducto' })
+  Producto.belongsTo(EntradaDetalles, { foreignKey: 'idProducto' });
+  EntradaDetalles.hasMany(Seccion, { foreignKey: 'idSeccion' })
+  Seccion.belongsTo(EntradaDetalles, { foreignKey: 'idProducto' });
 
 
   Seccion.sync()
@@ -65,6 +78,26 @@ exports.CrearModelos = () => {
       console.log("Error al crear el modelo");
       console.log(error);
     });
+
+  Entrada.sync().then((data) => {
+    console.log('Modelo creado correctamente');
+    console.log(data);
+  })//sincronizar
+
+    .catch((error) => {
+      console.log('Error al crear el modelo');
+      console.log(error);
+    })
+
+  EntradaDetalles.sync().then((data) => {
+    console.log('Modelo creado correctamente');
+    console.log(data);
+  })//sincronizar
+
+    .catch((error) => {
+      console.log('Error al crear el modelo');
+      console.log(error);
+    })
 
   salidas.sync()
     .then((data) => {
