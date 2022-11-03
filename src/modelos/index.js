@@ -48,6 +48,7 @@ exports.CrearModelos = () => {
       console.log("Error al crear el modelo");
       console.log(error);
     });
+
   Personal.sync()
     .then((data) => {
       console.log("Modelo creado correctamente");
@@ -60,7 +61,17 @@ exports.CrearModelos = () => {
     });
 
   salidas.sync()
-    Sucursal.sync()
+    .then((data) => {
+      console.log("Modelo creado correctamente");
+      console.log(data);
+    })
+
+    .catch((error) => {
+      console.log("Error al crear el modelo");
+      console.log(error);
+    });
+
+  Sucursal.sync()
     .then((data) => {
       console.log("Modelo creado correctamente");
       console.log(data);
@@ -72,7 +83,17 @@ exports.CrearModelos = () => {
     });
 
   detalles_Salida.sync()
-    Cliente.sync()
+    .then((data) => {
+      console.log("Modelo creado correctamente");
+      console.log(data);
+    })
+
+    .catch((error) => {
+      console.log("Error al crear el modelo");
+      console.log(error);
+    });
+
+  Cliente.sync()
     .then((data) => {
       console.log("Modelo creado correctamente");
       console.log(data);
