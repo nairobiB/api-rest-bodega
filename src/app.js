@@ -25,7 +25,7 @@ app.get("/", (req, res) => {
 
 app.use('/api/secciones', require('./rutas/Seccion'));
 app.use('/api/categorias', require('./rutas/Categoria'));
-
+app.use('/api/productos', require('./rutas/Producto'));
 /*app.listen(app.get("port"), () => {
   console.log(`Servidor iniciado en el puerto ${app.get("port")}`);
 });*/
