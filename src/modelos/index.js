@@ -3,13 +3,10 @@
 const Categoria = require("./Categoria");
 const Seccion = require("./Seccion");
 const Personal = require("./Personal");
-<<<<<<< HEAD
 const salidas = require("./salidas");
 const detalles_Salida = require("./detalles_Salida");
-=======
 const Sucursal = require("./Sucursal");
 const Cliente = require("./Cliente");
->>>>>>> 3be789674308d1f6c2fdc1433eb397a508d2e4cf
 
 exports.CrearModelos = () => {
   Seccion.hasMany(Categoria);
@@ -62,11 +59,8 @@ exports.CrearModelos = () => {
       console.log(error);
     });
 
-<<<<<<< HEAD
   salidas.sync()
-=======
     Sucursal.sync()
->>>>>>> 3be789674308d1f6c2fdc1433eb397a508d2e4cf
     .then((data) => {
       console.log("Modelo creado correctamente");
       console.log(data);
@@ -77,11 +71,8 @@ exports.CrearModelos = () => {
       console.log(error);
     });
 
-<<<<<<< HEAD
   detalles_Salida.sync()
-=======
     Cliente.sync()
->>>>>>> 3be789674308d1f6c2fdc1433eb397a508d2e4cf
     .then((data) => {
       console.log("Modelo creado correctamente");
       console.log(data);
