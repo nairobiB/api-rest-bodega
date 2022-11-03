@@ -7,6 +7,8 @@ const salidas = require("./salidas");
 const detalles_Salida = require("./detalles_Salida");
 const Sucursal = require("./Sucursal");
 const Cliente = require("./Cliente");
+const Rol = require('./rol');
+const Usuario = require('./usuario');
 
 exports.CrearModelos = () => {
   Seccion.hasMany(Categoria);
@@ -103,4 +105,23 @@ exports.CrearModelos = () => {
       console.log("Error al crear el modelo");
       console.log(error);
     });
+
+  Rol.sync().then((data) => {
+    console.log('Modelo creado correctamente');
+    console.log(data);
+  })//sincronizar
+
+    .catch((error) => {
+      console.log('Error al crear el modelo');
+      console.log(error);
+    })
+  Usuario.sync().then((data) => {
+    console.log('Modelo creado correctamente');
+    console.log(data);
+  })//sincronizar
+
+    .catch((error) => {
+      console.log('Error al crear el modelo');
+      console.log(error);
+    })
 };
