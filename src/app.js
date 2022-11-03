@@ -24,8 +24,13 @@ app.get("/", (req, res) => {
 app.use("/api/secciones", require("./rutas/Seccion"));
 app.use("/api/categorias", require("./rutas/Categoria"));
 app.use("/api/personal", require("./rutas/Personal"));
+<<<<<<< HEAD
 app.use("/api/salidas", require("./rutas/salidas"));
 app.use("/api/detalles_Salida", require("./rutas/detalles_Salida"));
+=======
+app.use("/api/sucursales", require("./rutas/Sucursal"));
+app.use("/api/clientes", require("./rutas/Cliente"));
+>>>>>>> 3be789674308d1f6c2fdc1433eb397a508d2e4cf
 
 app.listen(app.get("port"), () => {
   //esta tiene que ser la ultima linea del codigo
