@@ -29,6 +29,8 @@ app.use("/api/detalles_Salida", require("./rutas/detalles_Salida"));
 app.use('/api/roles', require('./rutas/rol'));
 app.use('/api/users', require('./rutas/usuario'));
 app.use('/api/productos', require('./rutas/Producto'));
+app.use('/api/entradas', require('./rutas/Entrada'));
+app.use('/api/entradasdetalles', require('./rutas/EntradaDetalle'));
 
 app.listen(app.get("port"), () => {
   //esta tiene que ser la ultima linea del codigo
