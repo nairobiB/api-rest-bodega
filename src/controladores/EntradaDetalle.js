@@ -97,16 +97,16 @@ exports.Guardar = async (req, res) => {
     }else{
       var buscarEntrada = await Entrada.findOne({where: {id:idEntrada}});
         if(!buscarEntrada){
-          res.json({msj: "debe de enviar los datos completos"});
+          res.json({msj: "La entrada no existe"});
         }else
         {
             var buscarProducto = await Producto.findOne({where: {id:idProducto}});
             if(!buscarProducto){
-            res.json({msj: "debe de enviar los datos completos"});
+            res.json({msj: "El producto no existe"});
             }else{
                 var buscarSeccion = await Seccion.findOne({where: {id:idSeccion}});
                 if(!buscarSeccion){
-                res.json({msj: "debe de enviar los datos completos"});
+                res.json({msj: "La seccion no existe"});
                 }else{
                     await EntradaDetalle.create({
                         idEntrada:idEntrada,

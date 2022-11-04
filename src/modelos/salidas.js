@@ -14,7 +14,7 @@ const salidas = db.define('salidas',{
     validate: {isFloat: true, min: 1}
   },
   fecha_Salida:{type: DataTypes.DATE, allowNull: false,
-    validate: {isDate: true, isBefore: datetime.toISOString().slice(0,10)}
+    validate: {isDate: true, isBefore: datetime.toString().slice(0,10)}
   },
   hora_Salida:{type: DataTypes.STRING(75), allowNull: false,
     validate: {notEmpty: true}
