@@ -1,45 +1,50 @@
 const { Router } = require("express");
-const controladorCategorias = require("../controladores/Categoria");
+const controladorSucursales = require("../controladores/Sucursal");
 const { body, query } = require("express-validator");
 const ruta = Router();
 
-ruta.get("/", controladorCategorias.Inicio);
-ruta.get("/listar", controladorCategorias.Listar);
+ruta.get("/", controladorSucursales.Inicio);
+ruta.get("/listar", controladorSucursales.Listar);
 ruta.get(
   "/buscarnombre",
-  query("nombreCompleto")
+  query("nombreSucursal")
     .isLength({ min: 5, max: 150 })
     .withMessage(
       "Debe escribir el nombre del tipo con una longitud de 5 - 150 caracteres"
     ),
-  controladorCategorias.BuscarNombre
+  controladorSucursales.BuscarNombre
 );
 ruta.get(
   "/buscarid",
   query("id").isInt().withMessage("Solo se aceptan valores enteros para el id"),
-  controladorCategorias.BuscarId
+  controladorSucursales.BuscarId
 );
 ruta.post(
   "/guardar",
-  body("nombreCategoria")
+    body("nombreSucursal")
     .isLength({ min: 3, max: 50 })
     .withMessage(
       "Debe escribir el nombre de la categoría con una longitud de 3 - 50 caracteres"
     ),
-  controladorCategorias.Guardar
+    body("Direccion")
+    .isLength({ min: 10, max: 80 })
+    .withMessage(
+      "Debe escribir el nombre de la sucursal con una longitud de 10 - 80 caracteres"
+    ),
+  controladorSucursales.Guardar
 );
 ruta.put(
   "/editar",
-  query("nombreCategoria")
+  query("nombreSucursal")
     .isLength({ min: 3, max: 50 })
     .withMessage(
       "Debe escribir el nombre de la categoría con una longitud de 3 - 50 caracteres"
     ),
-  controladorCategorias.Editar
+  controladorSucursales.Editar
 );
 ruta.delete(
   "/eliminar",
   query("id").isInt().withMessage("Solo se aceptan valores enteros para el id"),
-  controladorCategorias.Eliminar
+  controladorSucursales.Eliminar
 );
 module.exports = ruta;
