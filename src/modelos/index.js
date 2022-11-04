@@ -9,25 +9,53 @@ const Sucursal = require("./Sucursal");
 const Cliente = require("./Cliente");
 const Rol = require('./rol');
 const Usuario = require('./usuario');
+const Producto = require('./Producto');
+const Entrada = require('./Entrada');
+const EntradaDetalles = require('./EntradaDetalle');
 
 exports.CrearModelos = () => {
-  Seccion.hasMany(Categoria);
-  Categoria.belongsTo(Seccion);
 
   //Debido a que las tablas de Producto y Clientes aun no estaban en Github dejo una lineas comentadas para hacer la relacion entre ellas
 
-  // salidas.hasMany(productos, { foreignKey: 'idProducto' });
-  // productos.belongsTo(salidas, { foreignKey: 'id' });
-  // salidas.hasMany(clientes, { foreignKey: 'idCliente' });
-  // clientes.belongsTo(salidas, { foreignKey: 'id' });
+  Seccion.hasMany(Categoria);
+  Categoria.belongsTo(Seccion);
 
-  salidas.hasMany(detalles_Salida, { foreignKey: 'idSalida' });
-  detalles_Salida.belongsTo(salidas, { foreignKey: 'id' });
-  salidas.hasMany(detalles_Salida, { foreignKey: 'idProducto' });
-  detalles_Salida.belongsTo(salidas, { foreignKey: 'idProducto' });
+  Categoria.hasMany(Producto);
+  Producto.belongsTo(Categoria);
 
-  detalles_Salida.belongsTo(Seccion, { foreignKey: 'id' });
-  Seccion.hasOne(detalles_Salida, { foreignKey: 'idSeccion' })
+  Sucursal.hasMany(Entrada);
+  Entrada.belongsTo(Sucursal);
+
+  Sucursal.hasMany(Personal);
+  Personal.belongsTo(Sucursal);
+
+  Sucursal.hasMany(salidas);
+  salidas.belongsTo(Sucursal);
+
+  Cliente.hasMany(salidas, {foreignKey: 'id'});
+  salidas.belongsTo(Cliente, {foreignKey: 'idCliente'});
+
+  salidas.hasMany(detalles_Salida, { foreignKey: 'id' });
+  detalles_Salida.belongsTo(salidas, { foreignKey: 'idSalida' });
+
+  Producto.hasMany(detalles_Salida, { foreignKey: 'id' });
+  detalles_Salida.belongsTo(Producto, { foreignKey: 'idProducto' });
+
+  Seccion.hasMany(detalles_Salida, { foreignKey: 'id' });
+  detalles_Salida.belongsTo(Seccion, { foreignKey: 'idSeccion' });
+
+  Cliente.hasMany(Entrada, { foreignKey: 'id' });
+  Entrada.belongsTo(Cliente, { foreignKey: 'idCliente' });
+
+  Entrada.hasMany(EntradaDetalles, { foreignKey: 'idEntrada' });
+  EntradaDetalles.belongsTo(Entrada, { foreignKey: 'idEntrada' });
+
+  EntradaDetalles.belongsToMany(Producto, { through: 'EntradaDetalles_has_Producto', foreignKey: 'idProducto' });
+  Producto.belongsToMany(EntradaDetalles, { through: 'EntradaDetalles_has_Producto', foreignKey: 'id' });
+
+  Seccion.hasMany(EntradaDetalles, { foreignKey: 'id' })
+  EntradaDetalles.belongsTo(Seccion, { foreignKey: 'idSeccion' });
+
 
   Seccion.sync()
     .then((data) => {
@@ -61,6 +89,26 @@ exports.CrearModelos = () => {
       console.log("Error al crear el modelo");
       console.log(error);
     });
+
+  Entrada.sync().then((data) => {
+    console.log('Modelo creado correctamente');
+    console.log(data);
+  })//sincronizar
+
+    .catch((error) => {
+      console.log('Error al crear el modelo');
+      console.log(error);
+    })
+
+  EntradaDetalles.sync().then((data) => {
+    console.log('Modelo creado correctamente');
+    console.log(data);
+  })//sincronizar
+
+    .catch((error) => {
+      console.log('Error al crear el modelo');
+      console.log(error);
+    })
 
   salidas.sync()
     .then((data) => {
@@ -116,6 +164,16 @@ exports.CrearModelos = () => {
       console.log(error);
     })
   Usuario.sync().then((data) => {
+    console.log('Modelo creado correctamente');
+    console.log(data);
+  })//sincronizar
+
+    .catch((error) => {
+      console.log('Error al crear el modelo');
+      console.log(error);
+    })
+
+  Producto.sync().then((data) => {
     console.log('Modelo creado correctamente');
     console.log(data);
   })//sincronizar
