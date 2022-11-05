@@ -49,24 +49,17 @@ exports.Guardar = async (req, res) => {
     console.log(validacion.errors);
     res.json({ msj: 'Errores en los datos' })
   } else {
-    const { idProducto } = req.body;
     const { idCliente } = req.body;
-    const { producto } = req.body;
     const { precio } = req.body;
     const { fecha_Salida } = req.body;
     const { hora_Salida } = req.body;
-    if (!idProducto || !idCliente || !producto || !precio || !fecha_Salida || !hora_Salida) {
+    if (!idCliente || !precio || !fecha_Salida || !hora_Salida) {
       res.json({ msj: "debe enviar todos los datos" });
     } else {
       var buscarCliente = await Cliente.findOne({ where: { id: idCliente } });
-      var buscarProducto = await Producto.findOne({ where: { id: idProducto } });
 
       if (!buscarCliente) {
         res.json({ msj: "El Cliente no existe" });
-      }
-
-      else if (!buscarProducto) {
-        res.json({ msj: "El Producto no existe" });
       }
 
       else {
@@ -95,13 +88,11 @@ exports.Guardar = async (req, res) => {
 
 exports.Editar = async (req, res) => {
   const { id } = req.query;
-  const { idProducto } = req.body;
   const { idCliente } = req.body;
-  const { producto } = req.body;
   const { precio } = req.body;
   const { fecha_Salida } = req.body;
   const { hora_Salida } = req.body;
-  if (!id || !idProducto || !idCliente || !producto || !precio || !fecha_Salida || !hora_Salida) {
+  if (!id || !idCliente || !precio || !fecha_Salida || !hora_Salida) {
     res.json({ msj: "Debe enviar los datos completos" });
   } else {
     var buscarSalida = await salida.findOne({ where: { id: id } });
@@ -120,9 +111,7 @@ exports.Editar = async (req, res) => {
       }
 
       else {
-        buscarSalida.idProducto = idProducto;
         buscarSalida.idCliente = idCliente;
-        buscarSalida.producto = producto;
         buscarSalida.precio = precio;
         buscarSalida.fecha_Salida = fecha_Salida;
         buscarSalida.hora_Salida = hora_Salida;
