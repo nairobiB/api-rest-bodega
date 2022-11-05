@@ -1,6 +1,6 @@
 
 const { where } = require("sequelize");
-const Entrada= require("../modelos/Entrada");
+const Entrada = require("../modelos/Entrada");
 const Cliente = require("../modelos/Cliente");
 const Sucursal = require("../modelos/Sucursal");
 const { validationResult } = require("express-validator");
@@ -14,25 +14,25 @@ exports.Inicio = (req, res) => {
       {
         ruta: "/api/entradas/listar",
         descripcion: "Lista los entradas de productos",
-        metodo: "GET", 
+        metodo: "GET",
         parametros: "Ninguno",
       },
       {
-        ruta: "/api/entradas/guardar", 
+        ruta: "/api/entradas/guardar",
         descripcion: "Guarda los datos de una entrada de producto",
-        metodo: "POST", 
+        metodo: "POST",
         parametros: "Ninguno",
       },
       {
         ruta: "/api/entradas/editar",
         descripcion: "Modifica los datos de una entrada de producto",
-        metodo: "PUT", 
+        metodo: "PUT",
         parametros: "Ninguno",
       },
       {
         ruta: "/api/entradas/eliminar",
         descripcion: "Elimina los datos de una entrada de producto",
-        metodo: "DELETE", 
+        metodo: "DELETE",
         parametros: "Ninguno",
       },
     ],
@@ -46,16 +46,16 @@ exports.Listar = async (req, res) => {
   res.json(listarEntradas);
 };
 
-exports.BuscarId  = async (req, res) => {
+exports.BuscarId = async (req, res) => {
   const validacion = validationResult(req);
-  if(!validacion.isEmpty()){
+  if (!validacion.isEmpty()) {
     console.log(validacion.errores);
-    res.json({ msj: 'Errores en los datos enviados'})
+    res.json({ msj: 'Errores en los datos enviados' })
   }
-  else{
+  else {
     const { id } = req.query
     const listarEntradas = await Entrada.findAll({
-      where:{
+      where: {
         id: id
       }
     });
@@ -89,48 +89,46 @@ exports.Guardar = async (req, res) => {
     console.log(validacion);
     res.json({ msj: "Errores en los datos" });
   } else {
-    const {idCliente,fechaIngreso,idSucursal} = req.body;
+    const { idCliente, fechaIngreso, idSucursal } = req.body;
     console.log(fechaIngreso);
-    if (!idCliente ||  !fechaIngreso || !idSucursal) {
+    if (!idCliente || !fechaIngreso || !idSucursal) {
       res.json({ msj: "Debe enviar los datos completos de la entrada" });
-    }else{
-      var buscarCliente = await Cliente.findOne({where: {id:idCliente}});
-        if(!buscarCliente){
-          res.json({msj: "debe de enviar los datos completos"});
-        }else
-        {
-            var buscarSucursal = await Sucursal.findOne({where: {id:idSucursal}});
-            if(!buscarSucursal){
-            res.json({msj: "debe de enviar los datos completos"});
-            }else{
-                await Entrada.create({
-                    idCliente:idCliente,
-                    fechaIngreso:fechaIngreso,
-                    idSucursal:idSucursal
-             
-                })
-                .then((data) => {
-                  res.json({ msj: "Registro guardado" });
-                })
-                .catch((er) => {
-                  var errores = "";
-                  er.errors.forEach((element) => {
-                    console.log(element.message);
-                    errores += element.message + ". ";
-                  });
-                  res.json({ errores });
-                });
-              }
-
+    } else {
+      var buscarCliente = await Cliente.findOne({ where: { id: idCliente } });
+      if (!buscarCliente) {
+        res.json({ msj: "debe de enviar los datos completos" });
+      } else {
+        var buscarSucursal = await Sucursal.findOne({ where: { id: idSucursal } });
+        if (!buscarSucursal) {
+          res.json({ msj: "debe de enviar los datos completos" });
+        } else {
+          await Entrada.create({
+            idCliente: idCliente,
+            fechaIngreso: fechaIngreso,
+            idSucursal: idSucursal
+          })
+            .then((data) => {
+              res.json({ msj: "Registro guardado" });
+            })
+            .catch((er) => {
+              var errores = "";
+              er.errors.forEach((element) => {
+                console.log(element.message);
+                errores += element.message + ". ";
+              });
+              res.json({ errores });
+            });
         }
+
+      }
     }
   }
 };
 
 exports.Editar = async (req, res) => {
   const { id } = req.query;
-  const { idCliente, numLote,fechaIngreso,idSucursal } = req.body;
-  console.log(id); 
+  const { idCliente, numLote, fechaIngreso, idSucursal } = req.body;
+  console.log(id);
   if (!id) {
 
     res.send("Ingrese el ID");
@@ -148,9 +146,9 @@ exports.Editar = async (req, res) => {
       if (!buscarEntrada) {
         res.send("El id de la entrada no existe");
       } else {
-        buscarEntrada.idCliente= idCliente, 
-        buscarEntrada.fechaIngreso= fechaIngreso,
-        buscarEntrada.idSucursal=idSucursal;
+        buscarEntrada.idCliente = idCliente,
+          buscarEntrada.fechaIngreso = fechaIngreso,
+          buscarEntrada.idSucursal = idSucursal;
         await buscarentrada
           .save()
           .then((data) => {
