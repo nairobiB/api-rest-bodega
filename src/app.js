@@ -31,6 +31,8 @@ app.use('/api/users', require('./rutas/usuario'));
 app.use('/api/productos', require('./rutas/Producto'));
 app.use('/api/entradas', require('./rutas/Entrada'));
 app.use('/api/entradasdetalles', require('./rutas/EntradaDetalle'));
+app.use('/api/clientes', require('./rutas/Cliente'));
+app.use('/api/sucursales', require('./rutas/Sucursal'));
 
 app.listen(app.get("port"), () => {
   //esta tiene que ser la ultima linea del codigo
