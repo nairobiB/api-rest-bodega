@@ -40,7 +40,7 @@ exports.Inicio = (req, res) => {
 
 exports.Listar = async (req, res) => {
   const listar_Detalles_Salida = await detalles_Salida.findAll();
-  res.json({ operacion: 'listar' });
+  res.json(listar_Detalles_Salida);
 }
 
 exports.Guardar = async (req, res) => {
@@ -49,12 +49,8 @@ exports.Guardar = async (req, res) => {
     console.log(validacion.errors);
     res.json({ msj: 'Errores en los datos' })
   } else {
-    const { idSalida } = req.body;
-    const { idProducto } = req.body;
-    const { tamanio } = req.body;
-    const { precio } = req.body;
-    const { lotes } = req.body;
-    const { idSeccion } = req.body;
+    const { idSalida, idProducto, tamanio, precio, lotes, idSeccion } = req.body;
+
     if (!idSalida || !idProducto || !tamanio || !precio || !lotes || !idSeccion) {
       res.json({ msj: "debe enviar los datos del detalle salida" });
     } else {
@@ -98,12 +94,9 @@ exports.Guardar = async (req, res) => {
 }
 
 exports.Editar = async (req, res) => {
-  const { idSalida } = req.body;
-  const { idProducto } = req.body;
-  const { tamanio } = req.body;
-  const { precio } = req.body;
-  const { lotes } = req.body;
-  const { idSeccion } = req.body;
+  const { idSalida, idProducto } = req.query;
+  const { tamanio, precio, lotes, idSeccion } = req.body;
+
   if (!idSalida || !idProducto || !tamanio || !precio || !lotes || !idSeccion) {
     res.json({ msj: "Debe enviar los datos completos" });
   } else {

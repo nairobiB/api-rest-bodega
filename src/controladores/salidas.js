@@ -40,7 +40,7 @@ exports.Inicio = (req, res) => {
 
 exports.Listar = async (req, res) => {
   const listarSalidas = await salida.findAll();
-  res.json({ operacion: 'listar' });
+  res.json(listarSalidas);
 }
 
 exports.Guardar = async (req, res) => {
@@ -49,27 +49,26 @@ exports.Guardar = async (req, res) => {
     console.log(validacion.errors);
     res.json({ msj: 'Errores en los datos' })
   } else {
-    const { idCliente } = req.body;
-    const { precio } = req.body;
-    const { fecha_Salida } = req.body;
-    const { hora_Salida } = req.body;
-    if (!idCliente || !precio || !fecha_Salida || !hora_Salida) {
+    const { fecha_Salida, SucursalId, idCliente } = req.body;
+    if (!idCliente || !fecha_Salida || !SucursalId ) {
       res.json({ msj: "debe enviar todos los datos" });
     } else {
       var buscarCliente = await Cliente.findOne({ where: { id: idCliente } });
+      var buscarSucursal = await Sucursal.findOne({where: { id: SucursalId }});
 
       if (!buscarCliente) {
-        res.json({ msj: "El Cliente no existe" });
+        res.json({ msj: "El ID del Cliente no existe" });
+      }
+
+      else if(!buscarSucursal) {
+        res.json({ msj: "El ID de la Sucursal no existe" });
       }
 
       else {
         await salida.create({
-          idProducto: idProducto,
           idCliente: idCliente,
-          producto: producto,
-          precio: precio,
           fecha_Salida: fecha_Salida,
-          hora_Salida: hora_Salida,
+          SucursalId,
         }).then((data) => {
           res.json({ msj: "Registro guardado correctamente" })
         }).catch((e) => {
@@ -87,12 +86,10 @@ exports.Guardar = async (req, res) => {
 }
 
 exports.Editar = async (req, res) => {
-  const { id } = req.query;
-  const { idCliente } = req.body;
-  const { precio } = req.body;
-  const { fecha_Salida } = req.body;
-  const { hora_Salida } = req.body;
-  if (!id || !idCliente || !precio || !fecha_Salida || !hora_Salida) {
+  const { id  } = req.query;
+  const { idCliente, fecha_Salida, SucursalId } = req.body;
+  
+  if (!id || !idCliente ||!fecha_Salida || !SucursalId) {
     res.json({ msj: "Debe enviar los datos completos" });
   } else {
     var buscarSalida = await salida.findOne({ where: { id: id } });
@@ -100,21 +97,20 @@ exports.Editar = async (req, res) => {
       res.send('El id del salida no existe');
     } else {
       var buscarCliente = await Cliente.findOne({ where: { id: idCliente } });
-      var buscarProducto = await Producto.findOne({ where: { id: idProducto } });
+      var buscarSucursal = await Sucursal.findOne({where: { id: SucursalId }});
 
       if (!buscarCliente) {
         res.json({ msj: "El Cliente no existe" });
       }
 
-      else if (!buscarProducto) {
-        res.json({ msj: "El Producto no existe" });
+      else if(!buscarSucursal) {
+        res.json({ msj: "El ID de la Sucursal no existe" });
       }
 
       else {
         buscarSalida.idCliente = idCliente;
-        buscarSalida.precio = precio;
         buscarSalida.fecha_Salida = fecha_Salida;
-        buscarSalida.hora_Salida = hora_Salida;
+        buscarSalida.SucursalId= SucursalId
         await buscarSalida.save()
           .then((data) => {
             console.log(data);

@@ -1,5 +1,7 @@
 const { where } = require("sequelize");
 const Personal = require("../modelos/Personal");
+const Sucursal = require("../modelos/Sucursal");
+const Rol = require("../modelos/rol");
 const { validationResult } = require("express-validator");
 const { query } = require("express");
 const { Op } = require("sequelize");
@@ -83,18 +85,27 @@ exports.Guardar = async (req, res) => {
   if (!validacion.isEmpty()) {
     console.log(validacion);
     res.json({ msj: "Errores en los datos" });
-  } else {
-    const { nombreCompleto, direccion, correo, telefono, fechaNac } = req.body;
+  } 
+  else {
+    const { nombreCompleto, direccion, correo, telefono, fechaNac, RolId, SucursalId } = req.body;
     console.log(nombreCompleto);
-    if (!nombreCompleto || !direccion || !correo || !telefono || !fechaNac) {
+    if (!nombreCompleto || !direccion || !correo || !telefono || !fechaNac || !RolId || !SucursalId) {
       res.json({ msj: "Debe enviar los datos completos de la personal" });
-    } else {
+    }else{
+      var buscarRol = await Rol.findOne({where: {id:RolId}});
+      var buscarSucursal = await Sucursal.findOne({where: {id:SucursalId}});
+      if(!buscarRol || !SucursalId){
+          res.json({msj: "Debe ingresar los Ids correctos"});
+      }
+      else {
       await Personal.create({
         nombreCompleto: nombreCompleto,
         direccion: direccion,
         correo,
         telefono,
         fechaNac,
+        RolId,
+        SucursalId
       })
         .then((data) => {
           res.json({ msj: "Registro guardado" });
@@ -108,19 +119,20 @@ exports.Guardar = async (req, res) => {
           res.json({ errores });
         });
     }
+   }
   }
 };
 
 exports.Editar = async (req, res) => {
   const { id } = req.query;
-  const { nombreCompleto, direccion, correo, telefono, fechaNac } = req.body;
+  const { nombreCompleto, direccion, correo, telefono, fechaNac, RolId, SucursalId } = req.body;
 
   console.log(id);
 
   if (!id) {
     res.send("Ingrese el ID");
   } else {
-    if (!nombreCompleto || !direccion || !correo || !telefono || !fechaNac) {
+    if (!nombreCompleto || !direccion || !correo || !telefono || !fechaNac || !RolId || !SucursalId) {
       res.send("Ingrese el los datos completos");
     } else {
       var buscarPersonal = await Personal.findOne({
@@ -137,6 +149,8 @@ exports.Editar = async (req, res) => {
         buscarPersonal.correo = correo;
         buscarPersonal.telefono = telefono;
         buscarPersonal.fechaNac = fechaNac;
+        buscarPersonal.RolId = RolId;
+        buscarPersonal.SucursalId = SucursalId;
 
         await buscarPersonal
           .save()
