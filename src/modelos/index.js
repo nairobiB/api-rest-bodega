@@ -1,5 +1,7 @@
 //aqui van los modelos
 //How to create a foreign key with an existing column in sequelize: https://sequelize.org/docs/v6/other-topics/legacy/
+//Assosciation of sequelize: https://sequelize.org/docs/v6/core-concepts/assocs/  OJO LEANLO ESTA SUPER
+
 const Categoria = require("./Categoria");
 const Seccion = require("./Seccion");
 const Personal = require("./Personal");
@@ -15,60 +17,62 @@ const EntradaDetalles = require('./EntradaDetalle');
 
 exports.CrearModelos = () => {
 
-  //Debido a que las tablas de Producto y Clientes aun no estaban en Github dejo una lineas comentadas para hacer la relacion entre ellas
-
-  Seccion.hasMany(Categoria);
-  Categoria.belongsTo(Seccion);
-
-  Categoria.hasMany(Producto);
-  Producto.belongsTo(Categoria);
-
-  Sucursal.hasMany(Entrada);
-  Entrada.belongsTo(Sucursal);
+  Rol.hasOne(Personal);
+  Personal.belongsTo(Rol);
 
   Sucursal.hasMany(Personal);
   Personal.belongsTo(Sucursal);
 
+  Personal.hasOne(Usuario);
+  Usuario.belongsTo(Personal);
+
+  // Usuario.hasMany(Bitacora , {foreignKey: 'UserId'});
+  // Bitacora.belongsTo(Usuario);
+
   Sucursal.hasMany(salidas);
   salidas.belongsTo(Sucursal);
 
-  Cliente.hasMany(salidas, {foreignKey: 'id'});
-  salidas.belongsTo(Cliente, {foreignKey: 'idCliente'});
+  Sucursal.hasMany(Entrada);
+  Entrada.belongsTo(Sucursal);
 
-  salidas.hasMany(detalles_Salida, { foreignKey: 'id' });
-  detalles_Salida.belongsTo(salidas, { foreignKey: 'idSalida' });
+  Cliente.hasMany(salidas, { foreignKey: 'idCliente' });
+  salidas.belongsTo(Cliente, { foreignKey: 'idCliente' });
 
-  Producto.hasMany(detalles_Salida, { foreignKey: 'id' });
-  detalles_Salida.belongsTo(Producto, { foreignKey: 'idProducto' });
-
-  Seccion.hasMany(detalles_Salida, { foreignKey: 'id' });
-  detalles_Salida.belongsTo(Seccion, { foreignKey: 'idSeccion' });
-
-  Cliente.hasMany(Entrada, { foreignKey: 'id' });
+  Cliente.hasMany(Entrada, { foreignKey: 'idCliente' });
   Entrada.belongsTo(Cliente, { foreignKey: 'idCliente' });
+
+  salidas.hasMany(detalles_Salida, { foreignKey: 'idSalida' });
+  detalles_Salida.belongsTo(salidas, { foreignKey: 'idSalida' });
 
   Entrada.hasMany(EntradaDetalles, { foreignKey: 'idEntrada' });
   EntradaDetalles.belongsTo(Entrada, { foreignKey: 'idEntrada' });
 
-  EntradaDetalles.belongsToMany(Producto, { through: 'EntradaDetalles_has_Producto', foreignKey: 'idProducto' });
-  Producto.belongsToMany(EntradaDetalles, { through: 'EntradaDetalles_has_Producto', foreignKey: 'id' });
+  Categoria.hasMany(Producto, { foreignKey: 'idCategoria' });
+  Producto.belongsTo(Categoria, { foreignKey: 'idCategoria' });
 
-  Seccion.hasMany(EntradaDetalles, { foreignKey: 'id' })
-  EntradaDetalles.belongsTo(Seccion, { foreignKey: 'idSeccion' });
+  Producto.hasMany(EntradaDetalles, { foreignKey: 'idProducto' });
+  EntradaDetalles.belongsTo(Producto, { foreignKey: 'idProducto' });
 
+  Producto.hasMany(detalles_Salida, { foreignKey: 'idProducto' });
+  detalles_Salida.belongsTo(Producto, { foreignKey: 'idProducto' });
 
-  Seccion.sync()
-    .then((data) => {
-      console.log("Modelo creado correctamente");
-      console.log(data);
-    })
+  Seccion.hasMany(detalles_Salida);
+  EntradaDetalles.belongsTo(Seccion);
+
+  Seccion.hasMany(detalles_Salida);
+  EntradaDetalles.belongsTo(Seccion);
+
+  Rol.sync().then((data) => {
+    console.log('Modelo creado correctamente');
+    console.log(data);
+  })//sincronizar
 
     .catch((error) => {
-      console.log("Error al crear el modelo");
+      console.log('Error al crear el modelo');
       console.log(error);
-    });
+    })
 
-  Categoria.sync()
+  Sucursal.sync()
     .then((data) => {
       console.log("Modelo creado correctamente");
       console.log(data);
@@ -90,7 +94,7 @@ exports.CrearModelos = () => {
       console.log(error);
     });
 
-  Entrada.sync().then((data) => {
+  Usuario.sync().then((data) => {
     console.log('Modelo creado correctamente');
     console.log(data);
   })//sincronizar
@@ -100,7 +104,18 @@ exports.CrearModelos = () => {
       console.log(error);
     })
 
-  EntradaDetalles.sync().then((data) => {
+  Cliente.sync()
+    .then((data) => {
+      console.log("Modelo creado correctamente");
+      console.log(data);
+    })
+
+    .catch((error) => {
+      console.log("Error al crear el modelo");
+      console.log(error);
+    });
+
+  Entrada.sync().then((data) => {
     console.log('Modelo creado correctamente');
     console.log(data);
   })//sincronizar
@@ -121,7 +136,7 @@ exports.CrearModelos = () => {
       console.log(error);
     });
 
-  Sucursal.sync()
+  Categoria.sync()
     .then((data) => {
       console.log("Modelo creado correctamente");
       console.log(data);
@@ -131,6 +146,38 @@ exports.CrearModelos = () => {
       console.log("Error al crear el modelo");
       console.log(error);
     });
+
+  Producto.sync().then((data) => {
+    console.log('Modelo creado correctamente');
+    console.log(data);
+  })//sincronizar
+
+    .catch((error) => {
+      console.log('Error al crear el modelo');
+      console.log(error);
+    })
+
+
+  Seccion.sync()
+    .then((data) => {
+      console.log("Modelo creado correctamente");
+      console.log(data);
+    })
+
+    .catch((error) => {
+      console.log("Error al crear el modelo");
+      console.log(error);
+    });
+
+  EntradaDetalles.sync().then((data) => {
+    console.log('Modelo creado correctamente');
+    console.log(data);
+  })//sincronizar
+
+    .catch((error) => {
+      console.log('Error al crear el modelo');
+      console.log(error);
+    })
 
   detalles_Salida.sync()
     .then((data) => {
@@ -142,44 +189,4 @@ exports.CrearModelos = () => {
       console.log("Error al crear el modelo");
       console.log(error);
     });
-
-  Cliente.sync()
-    .then((data) => {
-      console.log("Modelo creado correctamente");
-      console.log(data);
-    })
-
-    .catch((error) => {
-      console.log("Error al crear el modelo");
-      console.log(error);
-    });
-
-  Rol.sync().then((data) => {
-    console.log('Modelo creado correctamente');
-    console.log(data);
-  })//sincronizar
-
-    .catch((error) => {
-      console.log('Error al crear el modelo');
-      console.log(error);
-    })
-  Usuario.sync().then((data) => {
-    console.log('Modelo creado correctamente');
-    console.log(data);
-  })//sincronizar
-
-    .catch((error) => {
-      console.log('Error al crear el modelo');
-      console.log(error);
-    })
-
-  Producto.sync().then((data) => {
-    console.log('Modelo creado correctamente');
-    console.log(data);
-  })//sincronizar
-
-    .catch((error) => {
-      console.log('Error al crear el modelo');
-      console.log(error);
-    })
 };
