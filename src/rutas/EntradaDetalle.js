@@ -5,6 +5,7 @@ const ruta = Router();
 
 ruta.get("/", controladorEntrada.Inicio);
 ruta.get("/listar", controladorEntrada.Listar);
+
 ruta.post("/guardar", 
 body("idEntrada")
 .isInt().
@@ -31,6 +32,7 @@ body("idSeccion")
 .isInt().
 withMessage("Solo se aceptan valores enteros para el idSeccion"),
 controladorEntrada.Guardar);
+
 ruta.put("/editar", 
 query("idEntrada")
 .isInt().
@@ -57,9 +59,10 @@ body("idSeccion")
 .isInt().
 withMessage("Solo se aceptan valores enteros para el idSeccion"),
 controladorEntrada.Editar);
+
 ruta.delete('/eliminar', 
 body("idEntrada")
 .isInt().
-withMessage("Solo se aceptan valores enteros para el idCliente")
-,controladorEntrada.Eliminar);
+withMessage("Solo se aceptan valores enteros para el idEntrada"),
+controladorEntrada.Eliminar);
 module.exports = ruta;
