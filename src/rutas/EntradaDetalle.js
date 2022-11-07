@@ -38,23 +38,28 @@ withMessage("Solo se aceptan valores enteros para el idCliente"),
 query("idProducto")
 .isInt().
 withMessage("Solo se aceptan valores enteros para el numLote"),
-query("tamanio")
+body("tamanio")
     .isLength({ min: 3, max: 50 })
     .withMessage(
       "Debe escribir el tamaño del producto con una longitud de 3 - 50 caracteres"
     ),
-query("numlote")
+body("numlote")
     .isInt().
     withMessage("Solo se aceptan valores enteros para el numLote"),
 query("precio")
     .isDecimal().
     withMessage("Solo se aceptan valores enteros para el Precio"),
 
-query("fechaVencimiento")
+body("fechaVencimiento")
 .isDate().
 withMessage("Solo se aceptan valores en fecha para la Fecha de vencimiento"),
-query("idSeccion")
+body("idSeccion")
 .isInt().
 withMessage("Solo se aceptan valores enteros para el idSeccion"),
-controladorEntrada.Eliminar);
+controladorEntrada.Editar);
+ruta.delete('/eliminar', 
+body("idEntrada")
+.isInt().
+withMessage("Solo se aceptan valores enteros para el idCliente")
+,controladorEntrada.Eliminar);
 module.exports = ruta;

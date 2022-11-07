@@ -150,7 +150,8 @@ exports.Editar = async (req, res) => {
     } else {
       var buscarEntradaDetalle = await EntradaDetalle.findOne({
         where: {
-          id: id,
+          idEntrada: idEntrada,
+          idProducto:idProducto
         },
       });
 
