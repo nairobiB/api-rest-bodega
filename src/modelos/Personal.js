@@ -22,7 +22,7 @@ const Personal = db.define(
       type: DataTypes.TEXT,
       allowNull: false,
     },
-    correo: {
+    correo_Personal: {
       type: DataTypes.STRING(50),
       allowNull: false,
 
