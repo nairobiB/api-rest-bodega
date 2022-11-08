@@ -29,6 +29,12 @@ const Usuario = db.define(
             }
         },
 
+        codigo: { type: DataTypes.STRING(10), 
+            allowNull: true, defaultValue: '0000' },
+        fallido: { type: DataTypes.INTEGER, 
+            allowNull: true, defaultValue: 0 },
+
+
         activo: {
             type: DataTypes.ENUM("AC", "IN", "BL"),
             allowNull: true,

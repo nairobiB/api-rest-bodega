@@ -5,7 +5,7 @@ const rutas = Router();
 //rutas.get("/", controladorAutenticacion.Inicio);
 //rutas.get('/listar', controladorCargos.Listar);
 
-/*rutas.post(
+rutas.post(
   "/pin",
   body("correo")
     .notEmpty()
@@ -36,9 +36,9 @@ rutas.put(
     .isLength({ min: 6, max: 12 })
     .withMessage("Debe escribir una contraseña de 6 - 12 caracteres"),
   controladorAutenticacion.Recuperar
-);*/
+);
 
-rutas.post(
+/*rutas.post(
   "/iniciosesion",
   //body('usuario').isLength({min: 3}).withMessage('Debe escribir el nombre de usuario'),
   body("usuario").notEmpty().withMessage("Debe escribir el usuario"),
@@ -46,6 +46,6 @@ rutas.post(
   controladorAutenticacion.InicioSesion
 );
 
-rutas.get("/error", controladorAutenticacion.Error);
+rutas.get("/error", controladorAutenticacion.Error);*/
 
 module.exports = rutas;
