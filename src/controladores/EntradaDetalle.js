@@ -138,27 +138,26 @@ exports.Guardar = async (req, res) => {
 };
 
 exports.Editar = async (req, res) => {
-  const { id } = req.query;
-  const { idEntrada, idProducto,tamanio, numLote, precio, fechaVencimiento, idSeccion} = req.body;
+  const { idEntrada, idProducto} = req.query;
+  const { tamanio, numLote, precio, fechaVencimiento, idSeccion} = req.body;
   console.log(id); 
-  if (!id) {
+  if (!idEntrada || !idProducto) {
 
-    res.send("Ingrese el ID");
+    res.send("El registro no existe");
   } else {
-    if (!idEntrada || !idProducto || !tamanio || !numLote || !precio || !fechaVencimiento || !idSeccion) {
+    if (!tamanio || !numLote || !precio || !fechaVencimiento || !idSeccion) {
       res.send("Debe enviar los datos completos de la entrada");
     } else {
       var buscarEntradaDetalle = await EntradaDetalle.findOne({
         where: {
-          id: id,
+          idEntrada: idEntrada,
+          idProducto:idProducto
         },
       });
 
       if (!buscarEntrada) {
         res.send("El id de la entrada no existe");
       } else {
-        buscarEntradaDetalle.idEntrada=idEntrada,
-        buscarEntradaDetalle.idProducto=idProducto,
         buscarEntradaDetalle.tamanio=tamanio,
         buscarEntradaDetalle.numLote=numLote,
         buscarEntradaDetalle.precio=precio,
@@ -180,11 +179,11 @@ exports.Editar = async (req, res) => {
 };
 
 exports.Eliminar = async (req, res) => {
-  const { id } = req.query;
-  if (!id) {
+  const { idEntrada} = req.query;
+  if (!idEntrada ) {
     res.json("Debe escribir el Id");
   } else {
-    await EntradaDetalle.destroy({ where: { id: id } })
+    await EntradaDetalle.destroy({ where: { idEntrada: idEntrada } })
       .then((data) => {
         if (data == 0) {
           res.send("El id no existe");
