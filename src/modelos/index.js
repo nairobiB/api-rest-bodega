@@ -49,7 +49,7 @@ exports.CrearModelos = () => {
 
   Entrada.hasMany(EntradaDetalles, { foreignKey: 'idEntrada' });
   EntradaDetalles.belongsTo(Entrada, { foreignKey: 'idEntrada' });
- 
+
   Categoria.hasMany(Producto, { foreignKey: 'idCategoria' });
   Producto.belongsTo(Categoria, { foreignKey: 'idCategoria' });
 
