@@ -1,8 +1,8 @@
 const { where } = require("sequelize");
 const { validationResult } = require("express-validator");
 const { query } = require("express");
-const Usuario = require("../modelos/usuario");
-const Rol = require('../modelos/rol');
+const Usuario = require("../modelos/Usuario");
+const Personal = require("../modelos/Personal");
 
 exports.Inicio = (req, res) => {
   const moduloUsuario = {
@@ -86,26 +86,43 @@ exports.Guardar = async (req, res) => {
     console.log(validacion);
     res.json({ msj: "Errores en los datos" });
   } else {
-        const { usuario, contrasena } = req.body;
+        const { usuario, contrasena, permisos, correo, PersonalId } = req.body;
         console.log(usuario);
         if (!usuario || !contrasena) {
         res.json({ msj: "Debe enviar los datos completos del usuario" });
         }else{
+          var buscarPersonal = await Personal.findOne({ where: { id: PersonalId } });
+          
+          if (!buscarPersonal) {
+            res.json({ msj: "El ID del Cliente no existe" });
+          }
+
+          else{
+          
+          if(contrasena < 5){
+            res.json({ msj: "La contraseña debe tener al menos 4 caracteres" })
+            console.log("La contraseña debe tener al menos 4 caracteres")
+          }
             await Usuario.create({
               usuario: usuario,
-              contrasena : contrasena
+              contrasena : contrasena,
+              permisos : permisos,
+              correo : correo,
+              PersonalId: PersonalId,
             })
             .then((data) => {
             res.json({ msj: "Registro guardado" });
             })
             .catch((er) => {
             var errores = "";
-            er.errors.forEach((element) => {
-                console.log(element.message);
+            er.errors.forEach(element => {
+                //console.log(element.message);
                 errores += element.message + ". ";
             });
-            res.json({ errores });
+            res.json( errores );
+            console.log(er);
             });
+          }
         }
     }
 };
@@ -113,7 +130,7 @@ exports.Guardar = async (req, res) => {
 
 exports.Editar = async (req, res) => {
   const { id } = req.query;
-  const { usuario, contrasena } = req.body;
+  const { usuario, contrasena, permisos, correo } = req.body;
   console.log(id);
 
   if (!id) {
@@ -135,6 +152,8 @@ exports.Editar = async (req, res) => {
       } else {
         buscarUsuario.usuario = usuario;
         buscarUsuario.contrasena = contrasena;
+        buscarUsuario.permisos = permisos;
+        buscarUsuario.correo = correo;
         await buscarUsuario
           .save()
           .then((data) => {
