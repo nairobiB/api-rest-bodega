@@ -1,10 +1,11 @@
 const { Router } = require("express");
 const controladorCliente = require("../controladores/Cliente");
+const { ValidarAutendicado } = require("../configuraciones/passport");
 const { body, query } = require("express-validator");
 
 const ruta = Router();
 ruta.get("/", controladorCliente.Inicio);
-ruta.get("/listar", controladorCliente.Listar);
+ruta.get("/listar", ValidarAutendicado, controladorCliente.Listar);
 ruta.get(
   "/buscarid",
   query("id").isInt().withMessage("Solo se aceptan valores enteros para el id"),

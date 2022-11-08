@@ -1,26 +1,34 @@
-const { DataTypes } = require('sequelize');
-const db = require('../configuraciones/db');
-const bcrypt = require('bcrypt');
+const { DataTypes } = require("sequelize");
+const db = require("../configuraciones/db");
+const bcrypt = require("bcrypt");
 const Usuario = db.define(
-  'Usuario',
+  "Usuario",
   {
     usuario: {
-      type: DataTypes.STRING(50), allowNull: false,
-      unique: { arg: true, msg: 'No se permiten nombres de usuarios duplicados' },
+      type: DataTypes.STRING(50),
+      allowNull: false,
+      unique: {
+        arg: true,
+        msg: "No se permiten nombres de usuarios duplicados",
+      },
       validate: {
-        len: [3, 50]
-      }
+        len: [3, 50],
+      },
     },
     contrasena: {
-      type: DataTypes.STRING(200), allowNull: false,
+      type: DataTypes.STRING(200),
+      allowNull: false,
       validate: {
-        len: [5, 65]
-      }
+        len: [5, 65],
+      },
     },
     correo: {
       type: DataTypes.STRING(50),
       allowNull: false,
-      unique: { arg: true, msg: 'No se permiten correos de usuarios duplicados' },
+      unique: {
+        arg: true,
+        msg: "No se permiten correos de usuarios duplicados",
+      },
       validate: {
         len: [5, 50],
       },

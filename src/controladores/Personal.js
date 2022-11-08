@@ -112,10 +112,10 @@ exports.Guardar = async (req, res) => {
           })
           .catch((er) => {
             var errores = "";
-            er.errors.forEach((element) => {
-              console.log(element.message);
-              errores += element.message + ". ";
-            });
+            /*er.errors.forEach((element) => {
+            console.log(element.message);
+            errores += element.message + ". ";
+          });*/
             res.json({ errores });
           });
       }
