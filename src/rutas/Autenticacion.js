@@ -38,7 +38,7 @@ rutas.put(
   controladorAutenticacion.Recuperar
 );
 
-/*rutas.post(
+rutas.post(
   "/iniciosesion",
   //body('usuario').isLength({min: 3}).withMessage('Debe escribir el nombre de usuario'),
   body("usuario").notEmpty().withMessage("Debe escribir el usuario"),
@@ -46,6 +46,6 @@ rutas.put(
   controladorAutenticacion.InicioSesion
 );
 
-rutas.get("/error", controladorAutenticacion.Error);*/
+rutas.get("/error", controladorAutenticacion.Error);
 
 module.exports = rutas;
