@@ -16,20 +16,24 @@ body("idSucursal")
 .isInt().
 withMessage("Solo se aceptan valores enteros para el idSucursal"),
 controladorEntrada.Guardar);
-ruta.put("/editar", 
-query("idCliente")
+ruta.put("/editar",
+query("id")
+.isInt().
+withMessage("Solo se aceptan valores enteros para el id de entrada"),
+body("idCliente")
 .isInt().
 withMessage("Solo se aceptan valores enteros para el idCliente"),
-query("numLote")
+body("numLote")
 .isInt().
 withMessage("Solo se aceptan valores enteros para el numLote"),
-query("fechaEntrada")
+body("fechaEntrada")
 .isDate().
 withMessage("Solo se aceptan valores de fechas para el fechaEntradas"),
-query("idSucursal")
+body("idSucursal")
 .isInt().
 withMessage("Solo se aceptan valores enteros para el idSucursal"),
 controladorEntrada.Editar);
+
 ruta.delete("/eliminar", 
 query("id").isInt().
 withMessage("Solo se aceptan valores enteros para el id"),
