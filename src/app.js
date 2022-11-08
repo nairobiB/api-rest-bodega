@@ -7,6 +7,9 @@
 
 const express = require("express");
 const morgan = require("morgan");
+const path = require('path');
+require('dotenv').config();
+
 const app = express();
 const path = require("path"); 
 require("dotenv").config();
@@ -17,6 +20,7 @@ app.set("port", 4001);
 //Puerto que se utilizará
 app.use(morgan("dev"));
 app.use(express.urlencoded({ extended: false }));
+app.use('/api/imagenes/', express.static(path.join(__dirname, 'public/img')));
 app.use(express.json());
 
 app.get("/", (req, res) => {

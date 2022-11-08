@@ -1,5 +1,5 @@
 const { Router } = require("express");
-const controladorEntrada = require("../controladores/Entrada");
+const controladorEntrada = require("../controladores/EntradaDetalle");
 const {body, query}= require('express-validator');
 const ruta = Router();
 
@@ -13,12 +13,12 @@ withMessage("Solo se aceptan valores enteros para el idCliente"),
 body("idProducto")
 .isInt().
 withMessage("Solo se aceptan valores enteros para el numLote"),
-body("tamanio")
+body("Tamanio")
     .isLength({ min: 3, max: 50 })
     .withMessage(
       "Debe escribir el tamaño del producto con una longitud de 3 - 50 caracteres"
     ),
-body("numlote")
+body("numLote")
     .isInt().
     withMessage("Solo se aceptan valores enteros para el numLote"),
 body("precio")
@@ -40,12 +40,12 @@ withMessage("Solo se aceptan valores enteros para el idCliente"),
 query("idProducto")
 .isInt().
 withMessage("Solo se aceptan valores enteros para el numLote"),
-body("tamanio")
+body("Tamanio")
     .isLength({ min: 3, max: 50 })
     .withMessage(
       "Debe escribir el tamaño del producto con una longitud de 3 - 50 caracteres"
     ),
-body("numlote")
+body("numLote")
     .isInt().
     withMessage("Solo se aceptan valores enteros para el numLote"),
 body("precio")

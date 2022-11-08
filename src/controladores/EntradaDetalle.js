@@ -40,12 +40,12 @@ exports.Inicio = (req, res) => {
   };
   res.json(moduloEntradaDetalle);
 };
-
-
 exports.Listar = async (req, res) => {
-  const listarEntradaDetalles = await EntradaDetalle.findAll();
+  const listarEntradaDetalles= await EntradaDetalle.findAll();
   res.json(listarEntradaDetalles);
-};
+}
+
+
 
 exports.BuscarId  = async (req, res) => {
   const validacion = validationResult(req);
@@ -54,13 +54,9 @@ exports.BuscarId  = async (req, res) => {
     res.json({ msj: 'Errores en los datos enviados'})
   }
   else{
-    const { id } = req.query
-    const listarEntradaDetalles = await EntradaDetalle.findAll({
-      where:{
-        id: id
-      }
-    });
-    res.json(listarEntradaDetalles);
+    const { idEntrada } = req.query
+    var buscarEntrada = await EntradaDetalle.findOne({where: {id:idEntrada}});
+    res.json(buscarEntrada);
   }
 
 };
@@ -90,16 +86,15 @@ exports.Guardar = async (req, res) => {
     console.log(validacion);
     res.json({ msj: "Errores en los datos" });
   } else {
-    const {idEntrada, idProducto,tamanio, numLote, precio, fechaVencimiento, idSeccion} = req.body;
-    console.log(tamanio, numLote, precio, fechaVencimiento);
-    if (!idEntrada || !idProducto || !tamanio || !numLote || !precio || !fechaVencimiento || !idSeccion) {
-      res.json({ msj: "Debe enviar los datos completos de la entrada" });
-    }else{
-      var buscarEntrada = await Entrada.findOne({where: {id:idEntrada}});
+    const {idEntrada, idProducto,Tamanio, numLote, precio, fechaVencimiento, idSeccion} = req.body;
+    var buscarEntrada = await Entrada.findOne({where: {id:idEntrada}});
         if(!buscarEntrada){
           res.json({msj: "La entrada no existe"});
         }else
         {
+        if (!idEntrada || !idProducto || !Tamanio || !numLote || !precio || !fechaVencimiento || !idSeccion) {
+          res.json({ msj: "Debe enviar los datos completos de la entrada" });
+       }else{      
             var buscarProducto = await Producto.findOne({where: {id:idProducto}});
             if(!buscarProducto){
             res.json({msj: "El producto no existe"});
@@ -111,7 +106,7 @@ exports.Guardar = async (req, res) => {
                     await EntradaDetalle.create({
                         idEntrada:idEntrada,
                         idProducto:idProducto,
-                        tamanio: tamanio, 
+                        Tamanio: Tamanio, 
                         numLote:numLote,
                         precio:precio,
                         fechaVencimiento:fechaVencimiento, 
@@ -139,13 +134,12 @@ exports.Guardar = async (req, res) => {
 
 exports.Editar = async (req, res) => {
   const { idEntrada, idProducto} = req.query;
-  const { tamanio, numLote, precio, fechaVencimiento, idSeccion} = req.body;
-  console.log(id); 
+  const { Tamanio, numLote, precio, fechaVencimiento, idSeccion} = req.body;
   if (!idEntrada || !idProducto) {
 
     res.send("El registro no existe");
   } else {
-    if (!tamanio || !numLote || !precio || !fechaVencimiento || !idSeccion) {
+    if (!Tamanio || !numLote || !precio || !fechaVencimiento || !idSeccion) {
       res.send("Debe enviar los datos completos de la entrada");
     } else {
       var buscarEntradaDetalle = await EntradaDetalle.findOne({
@@ -158,7 +152,7 @@ exports.Editar = async (req, res) => {
       if (!buscarEntrada) {
         res.send("El id de la entrada no existe");
       } else {
-        buscarEntradaDetalle.tamanio=tamanio,
+        buscarEntradaDetalle.Tamanio=Tamanio,
         buscarEntradaDetalle.numLote=numLote,
         buscarEntradaDetalle.precio=precio,
         buscarEntradaDetalle.fechaVencimiento=fechaVencimiento,

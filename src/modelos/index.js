@@ -35,8 +35,8 @@ exports.CrearModelos = () => {
   Sucursal.hasMany(salidas);
   salidas.belongsTo(Sucursal);
 
-  Sucursal.hasMany(Entrada);
-  Entrada.belongsTo(Sucursal);
+  Sucursal.hasMany(Entrada, { foreignKey: 'idSucursal' });
+  Entrada.belongsTo(Sucursal, { foreignKey: 'id' });
 
   Cliente.hasMany(salidas, { foreignKey: 'idCliente' });
   salidas.belongsTo(Cliente, { foreignKey: 'idCliente' });
@@ -48,8 +48,8 @@ exports.CrearModelos = () => {
   detalles_Salida.belongsTo(salidas, { foreignKey: 'idSalida' });
 
   Entrada.hasMany(EntradaDetalles, { foreignKey: 'idEntrada' });
-  EntradaDetalles.belongsTo(Entrada, { foreignKey: 'idEntrada' });
-
+  EntradaDetalles.belongsTo(Entrada, { foreignKey: 'id' });
+ 
   Categoria.hasMany(Producto, { foreignKey: 'idCategoria' });
   Producto.belongsTo(Categoria, { foreignKey: 'idCategoria' });
 
@@ -76,6 +76,26 @@ exports.CrearModelos = () => {
     console.log("Error al crear el modelo");
     console.log(error);
   });
+  Categoria.sync()
+  .then((data) => {
+    console.log("Modelo creado correctamente");
+    console.log(data);
+  })
+
+  .catch((error) => {
+    console.log("Error al crear el modelo");
+    console.log(error);
+  });
+
+Producto.sync().then((data) => {
+  console.log('Modelo creado correctamente');
+  console.log(data);
+})//sincronizar
+
+  .catch((error) => {
+    console.log('Error al crear el modelo');
+    console.log(error);
+  })
 
   Rol.sync().then((data) => {
     console.log('Modelo creado correctamente');
@@ -151,26 +171,7 @@ exports.CrearModelos = () => {
       console.log(error);
     });
 
-  Categoria.sync()
-    .then((data) => {
-      console.log("Modelo creado correctamente");
-      console.log(data);
-    })
 
-    .catch((error) => {
-      console.log("Error al crear el modelo");
-      console.log(error);
-    });
-
-  Producto.sync().then((data) => {
-    console.log('Modelo creado correctamente');
-    console.log(data);
-  })//sincronizar
-
-    .catch((error) => {
-      console.log('Error al crear el modelo');
-      console.log(error);
-    })
 
   EntradaDetalles.sync().then((data) => {
     console.log('Modelo creado correctamente');

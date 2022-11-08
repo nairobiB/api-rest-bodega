@@ -9,9 +9,9 @@ ruta.post("/guardar",
 body("idCliente")
 .isInt().
 withMessage("Solo se aceptan valores enteros para el idCliente"),
-body("fechaEntrada")
+body("fechaIngreso")
 .isDate().
-withMessage("Solo se aceptan valores enteros para el numLote"),
+withMessage("Solo se aceptan fechas para la fecha entrada"),
 body("idSucursal")
 .isInt().
 withMessage("Solo se aceptan valores enteros para el idSucursal"),

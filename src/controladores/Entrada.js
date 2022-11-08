@@ -105,7 +105,7 @@ exports.Guardar = async (req, res) => {
           await Entrada.create({
             idCliente: idCliente,
             fechaIngreso: fechaIngreso,
-            idSucursal: idSucursal
+            idSucursal: idCliente
           })
             .then((data) => {
               res.json({ msj: "Registro guardado" });
@@ -127,7 +127,7 @@ exports.Guardar = async (req, res) => {
 
 exports.Editar = async (req, res) => {
   const { id } = req.query;
-  const { idCliente, numLote, fechaIngreso, idSucursal } = req.body;
+  const { idCliente, fechaIngreso, idSucursal } = req.body;
   console.log(id);
   if (!id) {
 
