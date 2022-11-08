@@ -48,9 +48,9 @@ body("tamanio")
 body("numlote")
     .isInt().
     withMessage("Solo se aceptan valores enteros para el numLote"),
-query("precio")
+body("precio")
     .isDecimal().
-    withMessage("Solo se aceptan valores enteros para el Precio"),
+    withMessage("Solo se aceptan valores decimales para el Precio"),
 
 body("fechaVencimiento")
 .isDate().
@@ -61,7 +61,7 @@ withMessage("Solo se aceptan valores enteros para el idSeccion"),
 controladorEntrada.Editar);
 
 ruta.delete('/eliminar', 
-body("idEntrada")
+query("idEntrada")
 .isInt().
 withMessage("Solo se aceptan valores enteros para el idEntrada"),
 controladorEntrada.Eliminar);
