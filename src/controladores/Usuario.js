@@ -86,7 +86,7 @@ exports.Guardar = async (req, res) => {
     console.log(validacion);
     res.json({ msj: "Errores en los datos" });
   } else {
-        const { usuario, contrasena, permisos, correo, PersonalId } = req.body;
+        const { usuario, contrasena, permisos, correo, activo, PersonalId } = req.body;
         console.log(usuario);
         if (!usuario || !contrasena) {
         res.json({ msj: "Debe enviar los datos completos del usuario" });
@@ -108,18 +108,19 @@ exports.Guardar = async (req, res) => {
               contrasena : contrasena,
               permisos : permisos,
               correo : correo,
-              PersonalId: PersonalId,
+              activo : activo,
+              PersonalId: PersonalId
             })
             .then((data) => {
             res.json({ msj: "Registro guardado" });
             })
             .catch((er) => {
             var errores = "";
-            er.errors.forEach(element => {
+            /*er.errors.forEach(element => {
                 //console.log(element.message);
                 errores += element.message + ". ";
-            });
-            res.json( errores );
+            });*/
+            res.json( "errores" );
             console.log(er);
             });
           }
@@ -130,7 +131,7 @@ exports.Guardar = async (req, res) => {
 
 exports.Editar = async (req, res) => {
   const { id } = req.query;
-  const { usuario, contrasena, permisos, correo } = req.body;
+  const { usuario, contrasena, permisos, correo, activo, PersonalId } = req.body;
   console.log(id);
 
   if (!id) {
@@ -149,11 +150,21 @@ exports.Editar = async (req, res) => {
 
       if (!buscarUsuario) {
         res.send("El id del usuario no existe");
-      } else {
+      } 
+      else {
+
+        var buscarPersonal = await Personal.findOne({ where: { id: PersonalId } });
+          
+        if (!buscarPersonal) {
+          res.json({ msj: "El ID del Cliente no existe" });
+        }
+
         buscarUsuario.usuario = usuario;
         buscarUsuario.contrasena = contrasena;
         buscarUsuario.permisos = permisos;
+        buscarUsuario.activo = activo;
         buscarUsuario.correo = correo;
+        buscarUsuario.PersonalId = PersonalId;
         await buscarUsuario
           .save()
           .then((data) => {

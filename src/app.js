@@ -8,6 +8,8 @@
 const express = require("express");
 const morgan = require("morgan");
 const app = express();
+const path = require("path"); 
+require("dotenv").config();
 const db = require("./configuraciones/db");
 const Modelos = require("./modelos");
 

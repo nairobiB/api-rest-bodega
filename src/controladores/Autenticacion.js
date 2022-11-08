@@ -1,7 +1,7 @@
 const { validationResult } = require("express-validator");
 const passport = require("../configuraciones/passport");
-const Usuario = require("../modelos/usuario");
-const Personal = require("../modelos/Personal");
+const Usuario = require("../modelos/Usuario");
+//const Personal = require("../modelos/Personal");
 const { Op } = require("sequelize");
 const msjRes = require("../componentes/mensaje");
 const EnviarCorreo = require("../configuraciones/correo");
@@ -22,7 +22,7 @@ function validacion(req) {
   }
   return errores;
 }
-/*exports.Pin = async (req, res) => {
+exports.Pin = async (req, res) => {
   var errores = validacion(req);
   console.log(errores);
   if (errores) {
@@ -84,7 +84,7 @@ exports.Recuperar = async (req, res) => {
       where: {
         [Op.or]: {
           correo: busuario,
-          login: busuario,
+          usuario: busuario,
         },
       },
     });
@@ -124,8 +124,8 @@ exports.Recuperar = async (req, res) => {
       }
     }
   }
-};*/
-exports.InicioSesion = async (req, res) => {
+};
+/*exports.InicioSesion = async (req, res) => {
   var msj = validacion(req);
   if (msj) {
     msjRes("Peticion ejecutada correctamente", 200, [], msj, res);
@@ -218,4 +218,4 @@ exports.Error = async (req, res) => {
     },
   ];
   msjRes("Peticion ejecutada correctamente", 200, [], errores, res);
-};
+};*/
