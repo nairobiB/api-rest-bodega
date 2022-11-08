@@ -149,7 +149,7 @@ exports.Editar = async (req, res) => {
         },
       });
 
-      if (!buscarEntrada) {
+      if (!buscarEntradaDetalle) {
         res.send("El id de la entrada no existe");
       } else {
         buscarEntradaDetalle.Tamanio=Tamanio,
