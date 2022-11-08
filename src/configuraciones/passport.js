@@ -18,7 +18,7 @@ passport.use(
     return await Usuario.findOne({
       where: {
         id: payload.id,
-        estado: "AC",
+        activo: "AC",
       },
     })
       .then((data) => {

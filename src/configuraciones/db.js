@@ -1,17 +1,12 @@
-/*const sequelize = require('sequelize')
-const db = new sequelize(
-'bodega', 
-'devs',
-'movil2',
-{
-    host:'localhost',
-    dialect: 'mysql',
-    port: '3306',
-}
-);
-module.exports=db*/
-
 const sequelize = require("sequelize");
+const db = new sequelize("bodega", "devs", "movil2", {
+  host: "localhost",
+  dialect: "mysql",
+  port: "3306",
+});
+module.exports = db;
+
+/*const sequelize = require("sequelize");
 const db = new sequelize(
   process.env.BASE_NOMBRE, //nombre de la base de datos
   process.env.BASE_USUARIO,
@@ -22,4 +17,4 @@ const db = new sequelize(
     port: process.env.BASE_PUERTO,
   }
 );
-module.exports = db;
+module.exports = db;*/

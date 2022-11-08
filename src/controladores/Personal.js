@@ -85,54 +85,86 @@ exports.Guardar = async (req, res) => {
   if (!validacion.isEmpty()) {
     console.log(validacion);
     res.json({ msj: "Errores en los datos" });
-  } 
-  else {
-    const { nombreCompleto, direccion, correo, telefono, fechaNac, RolId, SucursalId } = req.body;
+  } else {
+    const {
+      nombreCompleto,
+      direccion,
+      correo,
+      telefono,
+      fechaNac,
+      RolId,
+      SucursalId,
+    } = req.body;
     console.log(nombreCompleto);
-    if (!nombreCompleto || !direccion || !correo || !telefono || !fechaNac || !RolId || !SucursalId) {
+    if (
+      !nombreCompleto ||
+      !direccion ||
+      !correo ||
+      !telefono ||
+      !fechaNac ||
+      !RolId ||
+      !SucursalId
+    ) {
       res.json({ msj: "Debe enviar los datos completos de la personal" });
-    }else{
-      var buscarRol = await Rol.findOne({where: {id:RolId}});
-      var buscarSucursal = await Sucursal.findOne({where: {id:SucursalId}});
-      if(!buscarRol || !SucursalId){
-          res.json({msj: "Debe ingresar los Ids correctos"});
-      }
-      else {
-      await Personal.create({
-        nombreCompleto: nombreCompleto,
-        direccion: direccion,
-        correo,
-        telefono,
-        fechaNac,
-        RolId,
-        SucursalId
-      })
-        .then((data) => {
-          res.json({ msj: "Registro guardado" });
+    } else {
+      var buscarRol = await Rol.findOne({ where: { id: RolId } });
+      var buscarSucursal = await Sucursal.findOne({
+        where: { id: SucursalId },
+      });
+      if (!buscarRol || !SucursalId) {
+        res.json({ msj: "Debe ingresar los Ids correctos" });
+      } else {
+        await Personal.create({
+          nombreCompleto: nombreCompleto,
+          direccion: direccion,
+          correo,
+          telefono,
+          fechaNac,
+          RolId,
+          SucursalId,
         })
-        .catch((er) => {
-          var errores = "";
-          er.errors.forEach((element) => {
+          .then((data) => {
+            res.json({ msj: "Registro guardado" });
+          })
+          .catch((er) => {
+            var errores = "";
+            /*er.errors.forEach((element) => {
             console.log(element.message);
             errores += element.message + ". ";
+          });*/
+            res.json({ errores });
           });
-          res.json({ errores });
-        });
+      }
     }
-   }
   }
 };
 
 exports.Editar = async (req, res) => {
   const { id } = req.query;
-  const { nombreCompleto, direccion, correo, telefono, fechaNac, RolId, SucursalId } = req.body;
+  const {
+    nombreCompleto,
+    direccion,
+    correo,
+    telefono,
+    fechaNac,
+    RolId,
+    SucursalId,
+  } = req.body;
 
   console.log(id);
 
   if (!id) {
     res.send("Ingrese el ID");
   } else {
-    if (!nombreCompleto || !direccion || !correo || !telefono || !fechaNac || !RolId || !SucursalId) {
+    if (
+      !nombreCompleto ||
+      !direccion ||
+      !correo ||
+      !telefono ||
+      !fechaNac ||
+      !RolId ||
+      !SucursalId
+    ) {
       res.send("Ingrese el los datos completos");
     } else {
       var buscarPersonal = await Personal.findOne({

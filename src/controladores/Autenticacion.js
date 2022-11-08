@@ -1,7 +1,7 @@
 const { validationResult } = require("express-validator");
 const passport = require("../configuraciones/passport");
 const Usuario = require("../modelos/usuario");
-const Personal = require("../modelos/Personal");
+//const Personal = require("../modelos/Personal");
 const { Op } = require("sequelize");
 const msjRes = require("../componentes/mensaje");
 const EnviarCorreo = require("../configuraciones/correo");
@@ -84,7 +84,7 @@ exports.Recuperar = async (req, res) => {
       where: {
         [Op.or]: {
           correo: busuario,
-          login: busuario,
+          usuario: busuario,
         },
       },
     });
@@ -92,7 +92,7 @@ exports.Recuperar = async (req, res) => {
     if (!buscarUsuario) {
       var errores = [
         {
-          mensaje: "El correo o login no existe",
+          mensaje: "El correo o usuario no existe",
           parametro: "usuario",
         },
       ];
@@ -133,8 +133,8 @@ exports.InicioSesion = async (req, res) => {
     try {
       const { usuario, contrasena } = req.body;
       var buscarUsuario = await Usuario.findOne({
-        attributes: ["usuario", "contrasena", "permisos", "id"],
-        include: {
+        attributes: ["usuario", "contrasena", "correo", "id"],
+        /*include: {
           model: Personal,
           attributes: [
             "nombreCompleto",
@@ -142,12 +142,12 @@ exports.InicioSesion = async (req, res) => {
             "correo",
             "telefono",
             "fechaNac",
-            "Imagen",
           ],
-        },
+        },*/
         where: {
           [Op.or]: {
             usuario: usuario,
+            correo: usuario,
           },
           activo: "AC",
         },
@@ -173,12 +173,11 @@ exports.InicioSesion = async (req, res) => {
             token: token,
             usuario: {
               usuario: buscarUsuario.usuario,
-              nombre: buscarUsuario.Personal.nombreCompleto,
-              direccion: buscarUsuario.Personal.direcion,
               correo: buscarUsuario.correo,
+              /*nombreCompleto: buscarUsuario.Personal.nombreCompleto,
+              direccion: buscarUsuario.Personal.direccion,
               telefono: buscarUsuario.Personal.telefono,
-              fechaNac: buscarUsuario.Personal.fechaNac,
-              Imagen: buscarUsuario.Personal.Imagen,
+              fechaNac: buscarUsuario.Personal.fechaNac,*/
             },
           };
           msjRes("Peticion ejecutada correctamente", 200, data, [], res);
@@ -205,7 +204,7 @@ exports.InicioSesion = async (req, res) => {
     } catch (error) {
       console.log(error);
       errores = "Error al conectar con la base de datos";
-      msjRes("Error al Ejecutar la Peticion", 500, [], errores, res);
+      msjRes("Error al Ejecutar la Peticion", 500, [error], errores, res);
     }
   }
 };
