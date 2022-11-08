@@ -1,7 +1,22 @@
 const { Router } = require("express");
 const controladorProducto = require("../controladores/Producto");
 const {body, query}= require('express-validator');
+const path = require('path');
+const multer = require('multer');
 const ruta = Router();
+
+const storageProductos = multer.diskStorage({
+    destination: function (req, file, cb){
+        cb(null, path.join(__dirname, '../public/img/productos'));
+    },
+    filename: function (req, file, cb){
+        const nombreUnico = Date.now() + '-' + Math.round(Math.random() * 1E9);
+        cb(null, file.fieldname + '-' + nombreUnico + '-' + file.mimetype.replace('/','.'));
+    }
+});
+const uploadProductos = multer({storage: storageProductos
+
+});
 
 ruta.get("/", controladorProducto.Inicio);
 ruta.get("/listar", controladorProducto.Listar);
@@ -42,4 +57,7 @@ ruta.delete("/eliminar",
 query("id").isInt().
 withMessage("Solo se aceptan valores enteros para el id"),
 controladorProducto.Eliminar);
+ruta.post('/imagen', 
+uploadProductos.single('img'), 
+controladorProducto.RecibirImagen);
 module.exports = ruta;

@@ -10,7 +10,8 @@ const Producto = db.define(
         },
         precioUnitario:{ type: DataTypes.DOUBLE,allowNull: false},
         precioVenta:{ type: DataTypes.DOUBLE, allowNull: false},
-        idCategoria:{ type: DataTypes.INTEGER, allowNull: false}
+        idCategoria:{ type: DataTypes.INTEGER, allowNull: false},
+        imagen:{type: DataTypes.STRING(250), allowNull:true}
     },
     {
         tableName: 'productos'

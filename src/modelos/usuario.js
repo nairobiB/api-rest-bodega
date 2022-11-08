@@ -18,7 +18,8 @@ const Usuario = db.define(
             validate: {
                 len: [3, 15]
             }
-        }
+        }, 
+        imagen:{type: DataTypes.STRING(250), allowNull:true}
     },
     {
         tableName: 'usuarios'

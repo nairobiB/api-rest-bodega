@@ -2,6 +2,15 @@
 const { where } = require("sequelize");
 const Producto = require("../modelos/Producto");
 const Categoria = require("../modelos/Categoria");
+const MSJ = require('../componentes/mensaje');
+const fs = require('fs');
+const path = require('path');
+var errores = [];
+var data = [];
+var error = {
+    msg: '',
+    parametro: ''
+};
 const { validationResult } = require("express-validator");
 const { query } = require("express");
 
@@ -178,3 +187,49 @@ exports.Eliminar = async (req, res) => {
       });
   }
 };
+
+exports.RecibirImagen = async (req, res) => {
+  const { filename } = req.file;
+  const { id } = req.body;
+  //console.log(req);
+  console.log(filename);
+  try {
+      errores=[];
+      data=[];
+      var buscarProducto = await Producto.findOne({ where:{ id: id }});
+      if(!buscarProducto){
+          const buscarImagen = fs.existsSync(path.join(__dirname, '../public/img/productos/' + filename));
+          if(!buscarImagen)
+              console.log('La imagen no existe');
+          else{
+              fs.unlinkSync(path.join(__dirname, '../public/img/productos/' + filename));
+              console.log('Imagen eliminada');
+          }
+          error.msg='El id del tipo no existe. Se elimino la imagen enviada';
+          error.parametro='id';
+          errores.push(error);
+          MSJ("Peticion ejecutada correctamente", 200, [], errores, res);
+      }else{
+          const buscarImagen = fs.existsSync(path.join(__dirname, '../public/img/productos/' + buscarProducto.imagen));
+          if(!buscarImagen)
+              console.log('No encontro la imagen');
+          else{
+              fs.unlinkSync(path.join(__dirname, '../public/img/productos/' + buscarProducto.imagen));
+              console.log('Imagen eliminada');
+          }
+          buscarProducto.imagen=filename;
+          await buscarProducto.save()
+          .then((data)=>{
+              MSJ('Peticion ejecutada correctamente', 200, data, errores, res);
+          })
+          .catch((error)=>{
+              errores.push(error);
+              MSJ('Peticion ejecutada correctamente', 200, [], errores, res);
+          });
+      }
+  } catch (error) {
+      console.log(error);
+      errores.push(error);
+      MSJ('Error al ejecutar la peticion', 500, [], errores, res);
+  }
+}
