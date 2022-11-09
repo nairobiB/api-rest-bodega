@@ -79,7 +79,7 @@ exports.buscarnombreSeccion  = async (req, res) => {
 
 };*/
 
-exports.Guardar = async (req, res) => { 
+exports.Guardar = async (req, res) => {
   const validacion = validationResult(req);
   if (!validacion.isEmpty()) {
     console.log(validacion);

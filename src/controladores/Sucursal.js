@@ -1,46 +1,47 @@
 const { where } = require("sequelize");
-const Categoria = require("../modelos/Categoria");
+const Sucursal = require("../modelos/Sucursal");
 const Seccion = require("../modelos/Seccion");
 const { validationResult } = require("express-validator");
 const { query } = require("express");
+const { Op } = require("sequelize");
 
 exports.Inicio = (req, res) => {
-  const moduloCategoria = {
-    modulo: "categorias",
-    descripcion: "Gestiona las operaciones con el modelo de categorias",
+  const moduloSucursal = {
+    modulo: "sucursales",
+    descripcion: "Gestiona las operaciones con el modelo de sucursales",
     rutas: [
       {
-        ruta: "/api/Categorias/listar",
-        descripcion: "Lista los categorias de productos",
+        ruta: "/api/Sucursales/listar",
+        descripcion: "Lista las sucursales de la empresa",
         metodo: "GET",
         parametros: "Ninguno",
       },
       {
-        ruta: "/api/categorias/guardar",
-        descripcion: "Guarda los datos de un categoria de producto",
+        ruta: "/api/sucursales/guardar",
+        descripcion: "Guarda los datos de una sucursal de la empresa",
         metodo: "POST",
         parametros: "Ninguno",
       },
       {
-        ruta: "/api/categorias/editar",
-        descripcion: "Modifica los datos de un categoria de producto",
+        ruta: "/api/sucursales/editar",
+        descripcion: "Modifica los datos de una sucursal existente de la empresa",
         metodo: "PUT",
         parametros: "Ninguno",
       },
       {
-        ruta: "/api/categorias/eliminar",
-        descripcion: "Elimina los datos de un categoria de producto",
+        ruta: "/api/sucursales/eliminar",
+        descripcion: "Elimina una sucursal registrada de la empresa",
         metodo: "DELETE",
         parametros: "Ninguno",
       },
     ],
   };
-  res.json(moduloCategoria);
+  res.json(moduloSucursal);
 };
 
 exports.Listar = async (req, res) => {
-  const listarCategorias = await Categoria.findAll();
-  res.json(listarCategorias);
+  const listarSucursales = await Sucursal.findAll();
+  res.json(listarSucursales);
 };
 
 exports.BuscarId = async (req, res) => {
@@ -50,12 +51,12 @@ exports.BuscarId = async (req, res) => {
     res.json({ msj: "Errores en los datos enviados" });
   } else {
     const { id } = req.query;
-    const listarCategorias = await Categoria.findAll({
+    const listarSucursales = await Sucursal.findAll({
       where: {
         id: id,
       },
     });
-    res.json(listarCategorias);
+    res.json(listarSucursales);
   }
 };
 
@@ -65,18 +66,18 @@ exports.BuscarNombre = async (req, res) => {
     console.log(validacion);
     res.json({ msj: "Errores en los datos" });
   } else {
-    const { nombreCategoria } = req.query;
-    const listarCategorias = await Tipo.findAll({
-      attributes: [["nombreCategoria", "Nombre categoria"]], //solo mostrar estos campos
+    const { nombreSucursal } = req.query;
+    const listarSucursales = await Sucursal.findAll({
+      attributes: [["nombreSucursal", "Nombre sucursal"]], //solo mostrar estos campos
       where: {
         [Op.and]: {
-          nombreCategoria: {
-            [Op.like]: nombreCategoria,
+          nombreSucursal: {
+            [Op.like]: nombreSucursal,
           },
         },
       },
     });
-    res.json(listarCategorias);
+    res.json(listarSucursales);
   }
 };
 
@@ -86,18 +87,15 @@ exports.Guardar = async (req, res) => {
     console.log(validacion);
     res.json({ msj: "Errores en los datos" });
   } else {
-    const { nombreCategoria, SeccionId } = req.body;
-    console.log(nombreCategoria);
-    if (!nombreCategoria || !SeccionId) {
-      res.json({ msj: "Debe enviar los datos completos de la categoria" });
-    } else {
-      var buscarSeccion = await Seccion.findOne({ where: { id: SeccionId } });
-      if (!buscarSeccion) {
-        res.json({ msj: "debe de enviar los datos completos" });
-      } else {
-        await Categoria.create({
-          nombreCategoria: nombreCategoria,
-          SeccionId: SeccionId,
+    const { nombreSucursal, Direccion } = req.body;
+    console.log(nombreSucursal);
+    if (!nombreSucursal || !Direccion) {
+      res.json({ msj: "Debe enviar los datos completos de la sucursal" });
+    } 
+    else {
+        await Sucursal.create({
+          nombreSucursal: nombreSucursal,
+          Direccion: Direccion,
         })
           .then((data) => {
             res.json({ msj: "Registro guardado" });
@@ -110,34 +108,34 @@ exports.Guardar = async (req, res) => {
             });
             res.json({ errores });
           });
-      }
     }
   }
 };
 
 exports.Editar = async (req, res) => {
   const { id } = req.query;
-  const { nombreCategoria } = req.body;
+  const { nombreSucursal, Direccion } = req.body;
 
   console.log(id);
 
   if (!id) {
     res.send("Ingrese el ID");
   } else {
-    if (!nombreCategoria) {
-      res.send("Ingrese el nombreCategoria");
+    if (!nombreSucursal || !Direccion) {
+      res.send("Ingrese el nombreSucursal");
     } else {
-      var buscarCategoria = await Categoria.findOne({
+      var buscarSucursal = await Sucursal.findOne({
         where: {
           id: id,
         },
       });
 
-      if (!buscarCategoria) {
-        res.send("El id del categoria no existe");
+      if (!buscarSucursal) {
+        res.send("El id de la sucursal no existe");
       } else {
-        buscarCategoria.nombreCategoria = nombreCategoria;
-        await buscarCategoria
+        buscarSucursal.nombreSucursal = nombreSucursal;
+        buscarSucursal.Direccion = Direccion;
+        await buscarSucursal
           .save()
           .then((data) => {
             console.log(data);
@@ -157,7 +155,7 @@ exports.Eliminar = async (req, res) => {
   if (!id) {
     res.json("Debe escribir el Id");
   } else {
-    await Categoria.destroy({ where: { id: id } })
+    await Sucursal.destroy({ where: { id: id } })
       .then((data) => {
         if (data == 0) {
           res.send("El id no existe");
