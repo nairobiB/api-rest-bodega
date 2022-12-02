@@ -34,21 +34,23 @@ const Usuario = db.define(
       },
     },
     permisos: {
-      type: DataTypes.STRING(15), allowNull: true,
+      type: DataTypes.STRING(15),
+      allowNull: true,
       validate: {
-        len: [3, 15]
-      }
+        len: [3, 15],
+      },
     },
 
     codigo: {
       type: DataTypes.STRING(10),
-      allowNull: true, defaultValue: '0000'
+      allowNull: true,
+      defaultValue: "0000",
     },
     fallido: {
       type: DataTypes.INTEGER,
-      allowNull: true, defaultValue: 0
+      allowNull: true,
+      defaultValue: 0,
     },
-
 
     activo: {
       type: DataTypes.ENUM("AC", "IN", "BL"),
@@ -56,22 +58,21 @@ const Usuario = db.define(
       defaultValue: "AC",
     },
 
-    imagen: { type: DataTypes.STRING(250), allowNull: true }
+    imagen: { type: DataTypes.STRING(250), allowNull: true },
   },
   {
-    tableName: 'usuarios',
+    tableName: "usuarios",
     hooks: {
-      beforeCreate(usuario) {
-        const hash = bcrypt.hashSync(usuario.contrasena, 10);
-        usuario.contrasena = hash;
-      },
+      // beforeCreate(usuario) {
+      //   const hash = bcrypt.hashSync(usuario.contrasena, 10);
+      //   usuario.contrasena = hash;
+      // },
       beforeUpdate(usuario) {
         if (usuario.contrasena) {
           const hash = bcrypt.hashSync(usuario.contrasena, 10);
           usuario.contrasena = hash;
         }
-        if (usuario.fallido >= 5)
-          usuario.estado = 'BL';
+        if (usuario.fallido >= 5) usuario.estado = "BL";
       },
     },
   }
