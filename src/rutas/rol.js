@@ -1,10 +1,11 @@
 const { Router } = require("express");
 const controladorRol = require("../controladores/Rol");
+const { ValidarAutendicado } = require("../configuraciones/passport");
 const {body, query}= require('express-validator');
 const ruta = Router();
 
 ruta.get("/", controladorRol.Inicio);
-ruta.get("/listar", controladorRol.Listar);
+ruta.get("/listar",ValidarAutendicado, controladorRol.Listar);
 ruta.get(
   "/buscarnombreRol",
   query("nombreRol")
