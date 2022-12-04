@@ -16,21 +16,21 @@ ruta.get(
   controladorRol.buscarnombreRol
 );
 
-ruta.post("/guardar", 
+ruta.post("/guardar", ValidarAutendicado,
 body("nombreRol")
     .isLength({ min: 3, max: 50 })
     .withMessage(
       "Debe escribir el nombre del rol con una longitud de 3 - 50 caracteres"
     ),
     controladorRol.Guardar);
-ruta.put("/editar", 
+ruta.put("/editar", ValidarAutendicado,
 query("nombreRol")
 .isLength({ min: 3, max: 50 })
 .withMessage(
   "Debe escribir el nombre del rol con una longitud de 3 - 50 caracteres"
 ),
 controladorRol.Editar);
-ruta.delete("/eliminar", 
+ruta.delete("/eliminar", ValidarAutendicado,
 query("id").isInt().
 withMessage("Solo se aceptan valores enteros para el id"),
 controladorRol.Eliminar);
