@@ -56,7 +56,7 @@ exports.Pin = async (req, res) => {
           "Peticion ejecutada correctamente",
           200,
           { msj: "Correo Enviado" },
-          errores,
+          errores = [],
           res
         );
       } else {

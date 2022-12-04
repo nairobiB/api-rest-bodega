@@ -30,6 +30,7 @@ passport.use(
       });
   })
 );
+
 exports.ValidarAutendicado = passport.authenticate("jwt", {
   session: false,
   failureRedirect: "/api/autenticacion/error",
