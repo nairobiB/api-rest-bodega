@@ -1,5 +1,6 @@
 const { where } = require("sequelize");
 const Categoria = require("../modelos/rol");
+const { Op } = require("sequelize");
 const { validationResult } = require("express-validator");
 const { query } = require("express");
 const Rol = require("../modelos/rol");
@@ -72,7 +73,7 @@ exports.buscarnombreRol  = async (req, res) => {
     const { nombreRol } = req.query
     const listarRol = await Rol.findAll({
       where:{
-        nombreRol: nombreRol
+        nombreRol:{ [Op.like]: nombreRol}
       }
     });
     res.json(listarRol);
