@@ -5,7 +5,7 @@ const Entrada = db.define(
   {
     idCliente: { type: DataTypes.INTEGER, allowNull: false},
     fechaIngreso: { type: DataTypes.DATE, allowNull: false },
-    SucursalId: { type: DataTypes.INTEGER, allowNull: false }
+    idSucursal: { type: DataTypes.INTEGER, allowNull: false }
   },
   {
     tableName: 'entradas'

@@ -20,9 +20,9 @@ withMessage("Solo se aceptan valores enteros para el idCliente"),
 body("fechaIngreso")
 .isDate().
 withMessage("Solo se aceptan fechas para la fecha entrada"),
-body("SucursalId")
+body("idSucursal")
 .isInt().
-withMessage("Solo se aceptan valores enteros para el SucursalId"),
+withMessage("Solo se aceptan valores enteros para el idSucursal"),
 controladorEntrada.Guardar);
 
 ruta.put("/editar", ValidarAutendicado,
@@ -38,9 +38,9 @@ withMessage("Solo se aceptan valores enteros para el numLote"),
 body("fechaEntrada")
 .isDate().
 withMessage("Solo se aceptan valores de fechas para el fechaEntradas"),
-body("SucursalId")
+body("idSucursal")
 .isInt().
-withMessage("Solo se aceptan valores enteros para el SucursalId"),
+withMessage("Solo se aceptan valores enteros para el idSucursal"),
 controladorEntrada.Editar);
 
 ruta.delete("/eliminar", ValidarAutendicado,

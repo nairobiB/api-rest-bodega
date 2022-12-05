@@ -89,16 +89,16 @@ exports.Guardar = async (req, res) => {
     console.log(validacion.errors);
     res.json({ msj: "Errores en los datos" });
   } else {
-    const { idCliente, fechaIngreso, SucursalId } = req.body;
+    const { idCliente, fechaIngreso, idSucursal } = req.body;
     console.log(fechaIngreso);
-    if (!idCliente || !fechaIngreso || !SucursalId) {
+    if (!idCliente || !fechaIngreso || !idSucursal) {
       res.json({ msj: "Debe enviar los datos completos de la entrada" });
     } else {
       var buscarCliente = await Cliente.findOne({ where: { id: idCliente } });
       if (!buscarCliente) {
         res.json({ msj: "debe de enviar los datos completos" });
       } else {
-        var buscarSucursal = await Sucursal.findOne({ where: { id: SucursalId } });
+        var buscarSucursal = await Sucursal.findOne({ where: { id: idSucursal } });
         if (!buscarSucursal) {
           res.json({ msj: "debe de enviar los datos completos" });
         } else {
@@ -126,13 +126,13 @@ exports.Guardar = async (req, res) => {
 
 exports.Editar = async (req, res) => {
   const { id } = req.query;
-  const { idCliente, fechaIngreso, SucursalId } = req.body;
+  const { idCliente, fechaIngreso, idSucursal } = req.body;
   console.log(id);
   if (!id) {
 
     res.send("Ingrese el ID");
   } else {
-    if (!idCliente || !fechaIngreso || !SucursalId || !id) {
+    if (!idCliente || !fechaIngreso || !idSucursal || !id) {
 
       res.send("Debe enviar los datos completos de la entrada");
     } else {
@@ -147,7 +147,7 @@ exports.Editar = async (req, res) => {
       } else {
         buscarEntrada.idCliente = idCliente,
           buscarEntrada.fechaIngreso = fechaIngreso,
-          buscarEntrada.SucursalId = SucursalId;
+          buscarEntrada.idSucursal = idSucursal;
         await buscarEntrada
           .save()
           .then((data) => {
