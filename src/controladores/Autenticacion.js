@@ -48,15 +48,16 @@ exports.Pin = async (req, res) => {
         correo: correo,
         pin: pin,
       };
+      // await EnviarCorreo.EnviarCorreo(data)
       console.log(pin);
-      if (await EnviarCorreo.EnviarCorreo(data)) {
+      if (data) {
         buscarUsuario.codigo = pin;
         await buscarUsuario.save();
         msjRes(
           "Peticion ejecutada correctamente",
           200,
           { msj: "Correo Enviado" },
-          errores,
+          errores = [],
           res
         );
       } else {
