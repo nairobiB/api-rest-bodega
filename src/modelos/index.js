@@ -35,8 +35,8 @@ exports.CrearModelos = () => {
   Sucursal.hasMany(salidas);
   salidas.belongsTo(Sucursal);
 
-  Sucursal.hasMany(Entrada, { foreignKey: 'SucursalId' });
-  Entrada.belongsTo(Sucursal, { foreignKey: 'id' });
+  Sucursal.hasMany(Entrada, { foreignKey: 'idSucursal' });
+  Entrada.belongsTo(Sucursal, { foreignKey: 'idSucursal' });
 
   Cliente.hasMany(salidas, { foreignKey: 'idCliente' });
   salidas.belongsTo(Cliente, { foreignKey: 'idCliente' });
@@ -49,7 +49,7 @@ exports.CrearModelos = () => {
 
   Entrada.hasMany(EntradaDetalles, { foreignKey: 'idEntrada' });
   EntradaDetalles.belongsTo(Entrada, { foreignKey: 'idEntrada' });
- 
+
   Categoria.hasMany(Producto, { foreignKey: 'idCategoria' });
   Producto.belongsTo(Categoria, { foreignKey: 'idCategoria' });
 

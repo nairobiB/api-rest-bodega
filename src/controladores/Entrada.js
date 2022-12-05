@@ -105,21 +105,19 @@ exports.Guardar = async (req, res) => {
           await Entrada.create({
             idCliente: idCliente,
             fechaIngreso: fechaIngreso,
-            SucursalId: SucursalId
+            idSucursal: idSucursal
           })
             .then((data) => {
             res.json({ msj: "Registro guardado" });
             })
-            .catch((e) => {
-              
-              var errores = "";
-              e.errors.forEach((element) => {
-                console.log(element.message);
-                errores += element.message + ". ";
-              });
-              res.json({ errores });
-              console.log(errores);
-            });
+            // .catch((er) => {
+            //   var errores = "";
+            //   er.errors.forEach((element) => {
+            //     console.log(element.message);
+            //     errores += element.message + ". ";
+            //   });
+            //   res.json({ errores });
+            // });
         }
       }
     }
