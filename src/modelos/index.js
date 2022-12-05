@@ -35,7 +35,7 @@ exports.CrearModelos = () => {
   Sucursal.hasMany(salidas);
   salidas.belongsTo(Sucursal);
 
-  Sucursal.hasMany(Entrada, { foreignKey: 'idSucursal' });
+  Sucursal.hasMany(Entrada, { foreignKey: 'SucursalId' });
   Entrada.belongsTo(Sucursal, { foreignKey: 'id' });
 
   Cliente.hasMany(salidas, { foreignKey: 'idCliente' });

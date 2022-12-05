@@ -1,6 +1,7 @@
 const { Router } = require("express");
 const controladorUsuario = require("../controladores/Usuario");
 const {body, query}= require('express-validator');
+const { ValidarAutendicado } = require("../configuraciones/passport");
 const path = require('path');
 const multer = require('multer');
 const ruta = Router();
@@ -19,9 +20,9 @@ const uploadUsuarios = multer({storage: storageUsuario
 
 ruta.get("/", controladorUsuario.Inicio);
 
-ruta.get("/listar", controladorUsuario.Listar);
+ruta.get("/listar", ValidarAutendicado, controladorUsuario.Listar);
 
-ruta.post("/guardar",
+ruta.post("/guardar", ValidarAutendicado,
     body("usuario")
     .isLength({ min: 3, max: 50 })
     .withMessage(
@@ -34,7 +35,7 @@ ruta.post("/guardar",
     ),
 controladorUsuario.Guardar);
 
-ruta.put("/editar",
+ruta.put("/editar", ValidarAutendicado,
 query('id').isInt().withMessage('Solo se aceptan valores enteros para el id'),
 body("usuario")
     .isLength({ min: 3, max: 50 })
@@ -48,7 +49,7 @@ body("usuario")
     ),
 controladorUsuario.Editar);
 
-ruta.delete("/eliminar",
+ruta.delete("/eliminar", ValidarAutendicado,
 query("id").isInt().
 withMessage("Solo se aceptan valores enteros para el id"),
 controladorUsuario.Eliminar);

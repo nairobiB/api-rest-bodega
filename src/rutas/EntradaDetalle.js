@@ -1,12 +1,20 @@
 const { Router } = require("express");
 const controladorEntrada = require("../controladores/EntradaDetalle");
 const {body, query}= require('express-validator');
+const { ValidarAutendicado } = require("../configuraciones/passport");
 const ruta = Router();
 
 ruta.get("/", controladorEntrada.Inicio);
-ruta.get("/listar", controladorEntrada.Listar);
+ruta.get("/listar", ValidarAutendicado, controladorEntrada.Listar);
 
-ruta.post("/guardar", 
+ruta.get(
+    "/buscarid", 
+    query("idProducto").isInt()
+    .withMessage("Solo se aceptan valores enteros para el id"),
+    controladorEntrada.BuscarId
+);
+
+ruta.post("/guardar", ValidarAutendicado,
 body("idEntrada")
 .isInt().
 withMessage("Solo se aceptan valores enteros para el idCliente"),
@@ -33,7 +41,7 @@ body("idSeccion")
 withMessage("Solo se aceptan valores enteros para el idSeccion"),
 controladorEntrada.Guardar);
 
-ruta.put("/editar", 
+ruta.put("/editar", ValidarAutendicado,
 query("idEntrada")
 .isInt().
 withMessage("Solo se aceptan valores enteros para el idCliente"),
@@ -60,9 +68,10 @@ body("idSeccion")
 withMessage("Solo se aceptan valores enteros para el idSeccion"),
 controladorEntrada.Editar);
 
-ruta.delete('/eliminar', 
+ruta.delete('/eliminar', ValidarAutendicado,
 query("idEntrada")
 .isInt().
 withMessage("Solo se aceptan valores enteros para el idEntrada"),
 controladorEntrada.Eliminar);
+
 module.exports = ruta;

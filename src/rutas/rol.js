@@ -5,9 +5,9 @@ const {body, query}= require('express-validator');
 const ruta = Router();
 
 ruta.get("/", controladorRol.Inicio);
-ruta.get("/listar",ValidarAutendicado, controladorRol.Listar);
+ruta.get("/listar", ValidarAutendicado, controladorRol.Listar);
 ruta.get(
-  "/buscarnombreRol",
+  "/buscarnombreRol", 
   query("nombreRol")
     .isLength({ min: 1, max: 50 })
     .withMessage(

@@ -64,7 +64,7 @@ exports.BuscarId = async (req, res) => {
 exports.BuscarNombre = async (req, res) => {
   const validacion = validationResult(req);
   if (!validacion.isEmpty()) {
-    console.log(validacion);
+    console.log(validacion.errores);
     res.json({ msj: "Errores en los datos" });
   } else {
     const { nombreCompleto } = req.query;

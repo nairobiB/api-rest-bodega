@@ -1,12 +1,13 @@
 const { Router } = require("express");
+const { ValidarAutendicado } = require("../configuraciones/passport");
 const controladorSucursales = require("../controladores/Sucursal");
 const { body, query } = require("express-validator");
 const ruta = Router();
 
 ruta.get("/", controladorSucursales.Inicio);
-ruta.get("/listar", controladorSucursales.Listar);
+ruta.get("/listar", ValidarAutendicado, controladorSucursales.Listar);
 ruta.get(
-  "/buscarnombre",
+  "/buscarnombre", ValidarAutendicado,
   query("nombreSucursal")
     .isLength({ min: 5, max: 150 })
     .withMessage(
@@ -15,12 +16,12 @@ ruta.get(
   controladorSucursales.BuscarNombre
 );
 ruta.get(
-  "/buscarid",
+  "/buscarid", ValidarAutendicado,
   query("id").isInt().withMessage("Solo se aceptan valores enteros para el id"),
   controladorSucursales.BuscarId
 );
 ruta.post(
-  "/guardar",
+  "/guardar", ValidarAutendicado,
     body("nombreSucursal")
     .isLength({ min: 3, max: 50 })
     .withMessage(
@@ -34,7 +35,7 @@ ruta.post(
   controladorSucursales.Guardar
 );
 ruta.put(
-  "/editar",
+  "/editar", ValidarAutendicado,
   query("nombreSucursal")
     .isLength({ min: 3, max: 50 })
     .withMessage(
@@ -43,7 +44,7 @@ ruta.put(
   controladorSucursales.Editar
 );
 ruta.delete(
-  "/eliminar",
+  "/eliminar", ValidarAutendicado,
   query("id").isInt().withMessage("Solo se aceptan valores enteros para el id"),
   controladorSucursales.Eliminar
 );

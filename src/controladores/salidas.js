@@ -2,6 +2,7 @@ const salida = require('../modelos/salidas');
 const Cliente = require("../modelos/Cliente");
 const Sucursal = require("../modelos/Sucursal");
 const { validationResult } = require('express-validator');
+const { Op } = require("sequelize");
 const Producto = require('../modelos/Producto');
 
 exports.Inicio = (req, res) => {
@@ -42,6 +43,24 @@ exports.Listar = async (req, res) => {
   const listarSalidas = await salida.findAll();
   res.json(listarSalidas);
 }
+
+exports.BuscarId  = async (req, res) => {
+  const validacion = validationResult(req);
+  if(!validacion.isEmpty()){
+    console.log(validacion.errores);
+    res.json({ msj: 'Errores en los datos enviados'})
+  }
+  else{
+    const { id } = req.query
+    const listarSalidas = await salida.findAll({
+      where:{
+        id: { [Op.like]: id }
+      }
+    });
+    res.json(listarSalidas);
+  }
+
+};
 
 exports.Guardar = async (req, res) => {
   const validacion = validationResult(req);

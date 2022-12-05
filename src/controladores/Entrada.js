@@ -1,9 +1,9 @@
-
 const { where } = require("sequelize");
 const Entrada = require("../modelos/Entrada");
 const Cliente = require("../modelos/Cliente");
 const Sucursal = require("../modelos/Sucursal");
 const { validationResult } = require("express-validator");
+const { Op } = require("sequelize");
 const { query } = require("express");
 
 exports.Inicio = (req, res) => {
@@ -56,7 +56,7 @@ exports.BuscarId = async (req, res) => {
     const { id } = req.query
     const listarEntradas = await Entrada.findAll({
       where: {
-        id: id
+        id: { [Op.like]: id }
       }
     });
     res.json(listarEntradas);
@@ -86,40 +86,41 @@ exports.buscarnombreentrada  = async (req, res) => {
 exports.Guardar = async (req, res) => {
   const validacion = validationResult(req);
   if (!validacion.isEmpty()) {
-    console.log(validacion);
+    console.log(validacion.errors);
     res.json({ msj: "Errores en los datos" });
   } else {
-    const { idCliente, fechaIngreso, idSucursal } = req.body;
+    const { idCliente, fechaIngreso, SucursalId } = req.body;
     console.log(fechaIngreso);
-    if (!idCliente || !fechaIngreso || !idSucursal) {
+    if (!idCliente || !fechaIngreso || !SucursalId) {
       res.json({ msj: "Debe enviar los datos completos de la entrada" });
     } else {
       var buscarCliente = await Cliente.findOne({ where: { id: idCliente } });
       if (!buscarCliente) {
         res.json({ msj: "debe de enviar los datos completos" });
       } else {
-        var buscarSucursal = await Sucursal.findOne({ where: { id: idSucursal } });
+        var buscarSucursal = await Sucursal.findOne({ where: { id: SucursalId } });
         if (!buscarSucursal) {
           res.json({ msj: "debe de enviar los datos completos" });
         } else {
           await Entrada.create({
             idCliente: idCliente,
             fechaIngreso: fechaIngreso,
-            idSucursal: idCliente
+            SucursalId: SucursalId
           })
             .then((data) => {
-              res.json({ msj: "Registro guardado" });
+            res.json({ msj: "Registro guardado" });
             })
-            .catch((er) => {
+            .catch((e) => {
+              
               var errores = "";
-              er.errors.forEach((element) => {
+              e.errors.forEach((element) => {
                 console.log(element.message);
                 errores += element.message + ". ";
               });
               res.json({ errores });
+              console.log(errores);
             });
         }
-
       }
     }
   }
@@ -127,13 +128,13 @@ exports.Guardar = async (req, res) => {
 
 exports.Editar = async (req, res) => {
   const { id } = req.query;
-  const { idCliente, fechaIngreso, idSucursal } = req.body;
+  const { idCliente, fechaIngreso, SucursalId } = req.body;
   console.log(id);
   if (!id) {
 
     res.send("Ingrese el ID");
   } else {
-    if (!idCliente || !fechaIngreso || !idSucursal || !id) {
+    if (!idCliente || !fechaIngreso || !SucursalId || !id) {
 
       res.send("Debe enviar los datos completos de la entrada");
     } else {
@@ -148,8 +149,8 @@ exports.Editar = async (req, res) => {
       } else {
         buscarEntrada.idCliente = idCliente,
           buscarEntrada.fechaIngreso = fechaIngreso,
-          buscarEntrada.idSucursal = idSucursal;
-        await buscarentrada
+          buscarEntrada.SucursalId = SucursalId;
+        await buscarEntrada
           .save()
           .then((data) => {
             console.log(data);

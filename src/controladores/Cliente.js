@@ -67,7 +67,7 @@ exports.BuscarNombre = async (req, res) => {
   } else {
     const { nombreCompleto } = req.query;
     const listarClientes = await Cliente.findAll({
-      attributes: [["nombreCompleto", "Nombre completo"]], //solo mostrar estos campos
+      // attributes: [["nombreCompleto", "Nombre completo"]], //solo mostrar estos campos
       where: {
         nombreCompleto: {
           [Op.like]: nombreCompleto,

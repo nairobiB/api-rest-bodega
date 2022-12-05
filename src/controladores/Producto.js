@@ -13,6 +13,7 @@ var error = {
 };
 const { validationResult } = require("express-validator");
 const { query } = require("express");
+const { Op } = require("sequelize");
 
 exports.Inicio = (req, res) => {
   const moduloProducto = {
@@ -72,7 +73,7 @@ exports.BuscarId  = async (req, res) => {
 
 };
 
-exports.buscarnombreProducto  = async (req, res) => {
+exports.BuscarNombre  = async (req, res) => {
   const validacion = validationResult(req);
   if(!validacion.isEmpty()){
     console.log(validacion.errores);
@@ -82,7 +83,7 @@ exports.buscarnombreProducto  = async (req, res) => {
     const { nombreProducto } = req.query
     const listarProductos = await Producto.findAll({
       where:{
-        nombreProducto: nombreProducto
+        nombreProducto: { [Op.like]: nombreProducto}
       }
     });
     res.json(listarProductos);

@@ -6,13 +6,15 @@ const { body, query } = require("express-validator");
 const ruta = Router();
 ruta.get("/", controladorCliente.Inicio);
 ruta.get("/listar", ValidarAutendicado, controladorCliente.Listar);
+
 ruta.get(
-  "/buscarid",
+  "/buscarid", 
   query("id").isInt().withMessage("Solo se aceptan valores enteros para el id"),
   controladorCliente.BuscarId
 );
+
 ruta.post(
-  "/guardar",
+  "/guardar", 
   body("nombreCompleto")
     .isLength({ min: 5, max: 150 })
     .withMessage(
@@ -22,7 +24,7 @@ ruta.post(
 );
 
 ruta.get(
-  "/buscarnombre",
+  "/buscarnombre", ValidarAutendicado,
   query("nombreCompleto")
     .isLength({ min: 1, max: 150 })
     .withMessage(
@@ -32,7 +34,7 @@ ruta.get(
 );
 
 ruta.put(
-  "/editar",
+  "/editar", ValidarAutendicado,
   query("id").isInt().withMessage("Solo se aceptan valores enteros para el id"),
   body("nombreCompleto")
     .isLength({ min: 5, max: 150 })
@@ -42,7 +44,7 @@ ruta.put(
   controladorCliente.Editar
 );
 ruta.delete(
-  "/eliminar",
+  "/eliminar", ValidarAutendicado,
   query("id").isInt().withMessage("Solo se aceptan valores enteros para el id"),
   controladorCliente.Eliminar
 );

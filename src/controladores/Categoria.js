@@ -1,5 +1,6 @@
 const { where } = require("sequelize");
 const Categoria = require("../modelos/Categoria");
+const { Op } = require("sequelize");
 const Seccion = require("../modelos/Seccion");
 const { validationResult } = require("express-validator");
 const { query } = require("express");
@@ -62,19 +63,17 @@ exports.BuscarId = async (req, res) => {
 exports.BuscarNombre = async (req, res) => {
   const validacion = validationResult(req);
   if (!validacion.isEmpty()) {
-    console.log(validacion);
+    console.log(validacion.errores);
     res.json({ msj: "Errores en los datos" });
   } else {
     const { nombreCategoria } = req.query;
-    const listarCategorias = await Tipo.findAll({
-      attributes: [["nombreCategoria", "Nombre categoria"]], //solo mostrar estos campos
+    const listarCategorias = await Categoria.findAll({
+      // attributes: [["nombreCategoria", "Nombre categoria"]], //solo mostrar estos campos
       where: {
-        [Op.and]: {
           nombreCategoria: {
             [Op.like]: nombreCategoria,
           },
         },
-      },
     });
     res.json(listarCategorias);
   }

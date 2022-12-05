@@ -1,26 +1,27 @@
 const { Router } = require("express");
 const controladorCategorias = require("../controladores/Categoria");
+const { ValidarAutendicado } = require("../configuraciones/passport");
 const { body, query } = require("express-validator");
 const ruta = Router();
 
 ruta.get("/", controladorCategorias.Inicio);
-ruta.get("/listar", controladorCategorias.Listar);
+ruta.get("/listar", ValidarAutendicado, controladorCategorias.Listar);
 ruta.get(
-  "/buscarnombre",
-  query("nombreCompleto")
-    .isLength({ min: 5, max: 150 })
+  "/buscarnombre", 
+  query("nombreCategoria")
+    .isLength({ min: 1, max: 150 })
     .withMessage(
       "Debe escribir el nombre del tipo con una longitud de 5 - 150 caracteres"
     ),
   controladorCategorias.BuscarNombre
 );
 ruta.get(
-  "/buscarid",
+  "/buscarid", 
   query("id").isInt().withMessage("Solo se aceptan valores enteros para el id"),
   controladorCategorias.BuscarId
 );
 ruta.post(
-  "/guardar",
+  "/guardar", ValidarAutendicado,
   body("nombreCategoria")
     .isLength({ min: 3, max: 50 })
     .withMessage(
@@ -29,7 +30,7 @@ ruta.post(
   controladorCategorias.Guardar
 );
 ruta.put(
-  "/editar",
+  "/editar", ValidarAutendicado,
   query("nombreCategoria")
     .isLength({ min: 3, max: 50 })
     .withMessage(
@@ -38,7 +39,7 @@ ruta.put(
   controladorCategorias.Editar
 );
 ruta.delete(
-  "/eliminar",
+  "/eliminar", ValidarAutendicado,
   query("id").isInt().withMessage("Solo se aceptan valores enteros para el id"),
   controladorCategorias.Eliminar
 );
