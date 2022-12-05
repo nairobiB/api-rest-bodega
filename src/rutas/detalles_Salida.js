@@ -8,7 +8,7 @@ ruta.get('/listar', ValidarAutendicado, controladorDetallesSalida.Listar);
 
 ruta.get(
     "/buscarid", 
-    query("idProducto").isInt().withMessage("Solo se aceptan valores enteros para el id del producto"),
+    query("idSalida").isInt().withMessage("Solo se aceptan valores enteros para el id del producto"),
     controladorDetallesSalida.BuscarId
 );
 

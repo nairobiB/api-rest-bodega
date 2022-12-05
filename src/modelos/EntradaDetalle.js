@@ -3,7 +3,7 @@ const db = require('../configuraciones/db');
 const EntradaDetalle = db.define(
     'EntradaDetalle',
     {
-        idEntrada: { type: DataTypes.INTEGER, allowNull: false, primaryKey:true, unique: true},
+        idEntrada: { type: DataTypes.INTEGER, allowNull: false, primaryKey:true, unique: false},
         idProducto: { type: DataTypes.INTEGER, allowNull: false,primaryKey:true, unique: true},
         Tamanio: { type: DataTypes.STRING(50), allowNull: false,
             validate: {

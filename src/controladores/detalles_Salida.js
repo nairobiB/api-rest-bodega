@@ -51,10 +51,10 @@ exports.BuscarId  = async (req, res) => {
     res.json({ msj: 'Errores en los datos enviados'})
   }
   else{
-    const { idProducto } = req.query
+    const { idSalida } = req.query
     const listar_Detalles_Salida = await detalles_Salida.findAll({
       where:{
-        idProducto: { [Op.like]: idProducto }
+        idSalida: { [Op.like]: idSalida }
       }
     });
     res.json(listar_Detalles_Salida);

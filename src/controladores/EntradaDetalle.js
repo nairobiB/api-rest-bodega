@@ -1,4 +1,3 @@
-
 const { where } = require("sequelize");
 const Entrada= require("../modelos/Entrada");
 const Producto = require("../modelos/Producto");
@@ -49,52 +48,33 @@ exports.Listar = async (req, res) => {
 exports.BuscarId  = async (req, res) => {
   const validacion = validationResult(req);
   if(!validacion.isEmpty()){
-    console.log(validacion.errores);
+    console.log(validacion);
     res.json({ msj: 'Errores en los datos enviados'})
   }
   else{
-    const { idProducto } = req.query
-    const listarEntradaDetalles = await detalles_Salida.findAll({
+    const { idEntrada } = req.query
+    const listarEntradaDetalles = await EntradaDetalle.findAll({
       where:{
-        idProducto: { [Op.like]: idProducto }
+        idEntrada: { [Op.like]: idEntrada }
       }
     });
     res.json(listarEntradaDetalles);
   }
 };
 
-exports.BuscarId  = async (req, res) => {
-  const validacion = validationResult(req);
-  if(!validacion.isEmpty()){
-    console.log(validacion.errores);
-    res.json({ msj: 'Errores en los datos enviados'})
-  }
-  else{
-    const { idEntrada } = req.query
-    var buscarEntrada = await EntradaDetalle.findOne({where: {id:idEntrada}});
-    res.json(buscarEntrada);
-  }
+// exports.BuscarId  = async (req, res) => {
+//   const validacion = validationResult(req);
+//   if(!validacion.isEmpty()){
+//     console.log(validacion.errores);
+//     res.json({ msj: 'Errores en los datos enviados'})
+//   }
+//   else{
+//     const { idEntrada } = req.query
+//     var buscarEntrada = await EntradaDetalle.findall({where: {id:idEntrada}});
+//     res.json(buscarEntrada);
+//   }
+// };
 
-};
-
-/*
-exports.buscarnombreentrada  = async (req, res) => {
-  const validacion = validationResult(req);
-  if(!validacion.isEmpty()){
-    console.log(validacion.errores);
-    res.json({ msj: 'Errores en los datos enviados'})
-  }
-  else{
-    const { nombreentrada } = req.query
-    const listarentradas = await entrada.findAll({
-      where:{
-        nombreentrada: nombreentrada
-      }
-    });
-    res.json(listarentradas);
-  }
-
-};*/
 
 exports.Guardar = async (req, res) => {
   const validacion = validationResult(req);
