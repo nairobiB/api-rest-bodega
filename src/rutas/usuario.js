@@ -22,6 +22,17 @@ ruta.get("/", controladorUsuario.Inicio);
 
 ruta.get("/listar", ValidarAutendicado, controladorUsuario.Listar);
 
+ruta.get(
+  "/buscarnombreUsuario", 
+  query("usuario")
+    .isLength({ min: 1, max: 50 })
+    .withMessage(
+      "Debe escribir el nombre del tipo con una longitud de 3 - 50 caracteres"
+    ),
+  controladorUsuario.buscarnombreUsuario
+);
+
+
 ruta.post("/guardar", ValidarAutendicado,
     body("usuario")
     .isLength({ min: 3, max: 50 })

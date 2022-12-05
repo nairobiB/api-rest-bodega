@@ -68,7 +68,7 @@ exports.BuscarNombre = async (req, res) => {
   } else {
     const { nombreSucursal } = req.query;
     const listarSucursales = await Sucursal.findAll({
-      attributes: [["nombreSucursal", "Nombre sucursal"]], //solo mostrar estos campos
+      //attributes: [["nombreSucursal", "Nombre sucursal"]], //solo mostrar estos campos
       where: {
         [Op.and]: {
           nombreSucursal: {

@@ -1,6 +1,7 @@
 const { where } = require("sequelize");
 const Seccion = require("../modelos/Seccion"); 
 const { validationResult } = require("express-validator");
+const { Op } = require("sequelize");
 const { query } = require("express");
 
 exports.Inicio = (req, res) => {
@@ -59,7 +60,7 @@ exports.Listar = async (req, res) => {
     res.json(listarSecciones);
   }
 
-};
+};*/
 
 exports.buscarnombreSeccion  = async (req, res) => {
   const validacion = validationResult(req);
@@ -71,13 +72,13 @@ exports.buscarnombreSeccion  = async (req, res) => {
     const { nombreSeccion } = req.query
     const listarSecciones = await Seccion.findAll({
       where:{
-        nombreSeccion: nombreSeccion
+        nombreSeccion: { [Op.like]: nombreSeccion}
       }
     });
     res.json(listarSecciones);
   }
 
-};*/
+};
 
 exports.Guardar = async (req, res) => {
   const validacion = validationResult(req);

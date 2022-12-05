@@ -2,6 +2,7 @@ const { where } = require("sequelize");
 const MSJ = require('../componentes/mensaje');
 const fs = require('fs');
 const path = require('path');
+const { Op } = require("sequelize");
 var errores = [];
 var data = [];
 var error = {
@@ -81,7 +82,7 @@ exports.buscarnombreUsuario  = async (req, res) => {
     const { usuario } = req.query
     const listarUsuario = await Usuario.findAll({
       where:{
-        usuario: usuario
+        usuario: { [Op.like]: usuario}
       }
     });
     res.json(listarUsuario);

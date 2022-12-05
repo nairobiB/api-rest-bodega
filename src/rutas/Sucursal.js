@@ -7,9 +7,9 @@ const ruta = Router();
 ruta.get("/", controladorSucursales.Inicio);
 ruta.get("/listar", ValidarAutendicado, controladorSucursales.Listar);
 ruta.get(
-  "/buscarnombre", ValidarAutendicado,
+  "/buscarnombre", 
   query("nombreSucursal")
-    .isLength({ min: 5, max: 150 })
+    .isLength({ min: 1, max: 150 })
     .withMessage(
       "Debe escribir el nombre del tipo con una longitud de 5 - 150 caracteres"
     ),
