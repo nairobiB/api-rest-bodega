@@ -110,14 +110,14 @@ exports.Guardar = async (req, res) => {
             .then((data) => {
             res.json({ msj: "Registro guardado" });
             })
-            // .catch((er) => {
-            //   var errores = "";
-            //   er.errors.forEach((element) => {
-            //     console.log(element.message);
-            //     errores += element.message + ". ";
-            //   });
-            //   res.json({ errores });
-            // });
+            .catch((er) => {
+              var errores = "";
+              er.errors.forEach((element) => {
+                console.log(element.message);
+                errores += element.message + ". ";
+              });
+              res.json({ errores });
+            });
         }
       }
     }
