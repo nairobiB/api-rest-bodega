@@ -53,11 +53,6 @@ body("usuario")
     .withMessage(
       "Debe escribir el nombre del usuario con una longitud de 3 - 50 caracteres"
     ),
-    body("contrasena")
-    .isLength({ min: 5, max: 65 })
-    .withMessage(
-      "Debe escribir la contrasena con una longitud de 5 - 20 caracteres"
-    ),
 controladorUsuario.Editar);
 
 ruta.delete("/eliminar", ValidarAutendicado,
