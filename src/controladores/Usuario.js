@@ -141,16 +141,16 @@ exports.Guardar = async (req, res) => {
 
 exports.Editar = async (req, res) => {
   const { id } = req.query;
-  const { usuario, contrasena, permisos, correo, activo, PersonalId } = req.body;
+  const { usuario,permisos, correo, PersonalId } = req.body;
   console.log(id);
 
   if (!id) {
 
     res.send("Ingrese el ID");
   } else {
-    if (!usuario || !contrasena) {
+    if (!usuario) {
 
-      res.send("Ingrese el usuario y la contrasena");
+      res.send("Ingrese el usuarioa");
     } else {
       var buscarUsuario = await Usuario.findOne({
         where: {
@@ -163,18 +163,15 @@ exports.Editar = async (req, res) => {
       } 
       else {
 
-        var buscarPersonal = await Personal.findOne({ where: { id: PersonalId } });
-          
-        if (!buscarPersonal) {
-          res.json({ msj: "El ID del Cliente no existe" });
-        }
+        // var buscarPersonal = await Personal.findOne({ where: { id: PersonalId } });
+
+        // if (!buscarPersonal) {
+        //   res.json({ msj: "El ID del Cliente no existe" });
+        // }
 
         buscarUsuario.usuario = usuario;
-        buscarUsuario.contrasena = contrasena;
         buscarUsuario.permisos = permisos;
-        buscarUsuario.activo = activo;
         buscarUsuario.correo = correo;
-        buscarUsuario.PersonalId = PersonalId;
         await buscarUsuario
           .save()
           .then((data) => {
