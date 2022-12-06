@@ -69,7 +69,7 @@ exports.BuscarNombre = async (req, res) => {
   } else {
     const { nombreCompleto } = req.query;
     const listarPersonal = await Personal.findAll({
-      attributes: [["nombreCompleto", "Nombre completo"]], //solo mostrar estos campos
+      //attributes: [["nombreCompleto", "Nombre completo"]], //solo mostrar estos campos
       where: {
         nombreCompleto: {
           [Op.like]: nombreCompleto,
