@@ -83,7 +83,7 @@ exports.Recuperar = async (req, res) => {
     var buscarUsuario = await Usuario.findOne({
       where: {
         [Op.or]: {
-          correo: busuario,
+          // correo: busuario,
           usuario: busuario,
         },
       },
